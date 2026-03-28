@@ -1,8 +1,10 @@
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, emit, join_room
 import random
 import time
-import threading
 import copy
 
 app = Flask(__name__)
@@ -74,9 +76,6 @@ CHARACTERS = {
     },
 }
 
-timeout_thread_started = False
-timeout_thread_lock = threading.Lock()
-
 
 def weighted_question():
     r = random.random()
@@ -90,9 +89,9 @@ def weighted_question():
 
 def create_grid(size):
     grid = []
-    for i in range(size):
+    for _ in range(size):
         row = []
-        for j in range(size):
+        for _ in range(size):
             row.append({
                 "status": "hidden",   # hidden / owned / blocked
                 "owner": None,
@@ -185,6 +184,7 @@ def try_end_game(room_id):
                 "name": p["name"],
                 "count": count_owned_cells(room_id, sid),
                 "color": p["color"],
+                "character": p["character"],
                 "character_name": CHARACTERS[p["character"]]["name"],
             })
 
@@ -232,7 +232,6 @@ def personalized_room_state(room_id, sid):
                 "type": None,
             }
 
-            # 先知可以直接看所有格子的題型
             if player and player["character"] == "seer":
                 c["type"] = cell["question"]["type"]
 
@@ -295,12 +294,6 @@ def handle_correct_answer(room_id, sid, x, y):
 
 
 def start_timeout_checker():
-    global timeout_thread_started
-    with timeout_thread_lock:
-        if timeout_thread_started:
-            return
-        timeout_thread_started = True
-
     def loop():
         while True:
             now = time.time()
@@ -345,8 +338,6 @@ def on_join(data):
         emit("self_message", {"msg": "玩家數錯誤。"})
         return
 
-    start_timeout_checker()
-
     if room_id not in ROOMS:
         ROOMS[room_id] = {
             "grid": create_grid(board_size),
@@ -359,6 +350,7 @@ def on_join(data):
             "game_over": False,
             "winner_text": "",
             "active_questions": {},
+            "timeout_started": False,
         }
 
     room = ROOMS[room_id]
@@ -373,7 +365,6 @@ def on_join(data):
 
     join_room(room_id)
 
-    # 防止角色重複
     chosen_characters = [p["character"] for p in room["players"].values()]
     if character in chosen_characters and request.sid not in room["players"]:
         emit("self_message", {"msg": "此角色已被其他玩家選走。"})
@@ -401,6 +392,10 @@ def on_join(data):
             },
         }
         room["player_order"].append(request.sid)
+
+    if not room["timeout_started"]:
+        room["timeout_started"] = True
+        start_timeout_checker()
 
     emit("joined", {"sid": request.sid, "room": room_id})
     emit_room_state(room_id)
@@ -508,7 +503,6 @@ def start_answer(data):
         return
 
     q = copy.deepcopy(cell["question"])
-
     extra_time = 5 if player["character"] == "slow" else 0
     seconds = BASE_TIME_LIMIT + extra_time
 
@@ -702,4 +696,4 @@ def on_disconnect():
 
 
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
+    socketio.run(app, host="0.0.0.0", port=5000)
