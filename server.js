@@ -211,6 +211,35 @@ function emitRoom(room) {
   }
 }
 
+function getPublicRooms() {
+  const modeText = {
+    normal: "普通題型",
+    hard: "困難題型",
+    super: "超級難題型",
+    mix: "綜合題型"
+  };
+
+  return [...rooms.values()]
+    .filter((room) => !room.started && !room.finished && room.players.length < room.playerLimit)
+    .map((room) => {
+      const owner = room.players.find((p) => p.id === room.ownerId);
+      return {
+        roomNo: room.roomNo,
+        ownerName: owner ? owner.nickname : "房主",
+        players: room.players.length,
+        playerLimit: room.playerLimit,
+        mapSize: room.mapSize,
+        mode: room.mode,
+        modeText: modeText[room.mode] || "綜合題型"
+      };
+    })
+    .sort((a, b) => String(a.roomNo).localeCompare(String(b.roomNo), "zh-Hant-u-kn-true"));
+}
+
+function emitPublicRooms() {
+  io.emit("public_rooms", getPublicRooms());
+}
+
 function cancelCountdown(room, reason = "") {
   if (room.countdownTimer) {
     clearTimeout(room.countdownTimer);
@@ -270,6 +299,7 @@ function startGame(room) {
   updateEndedPlayers(room);
   addLog(room, "遊戲正式開始");
   emitRoom(room);
+  emitPublicRooms();
 }
 
 function createRoom(roomNo, mapSize, playerLimit, mode) {
@@ -362,6 +392,7 @@ function joinRoom(socket, payload) {
 
   cancelCountdown(room, "");
   emitRoom(room);
+  emitPublicRooms();
 }
 
 function toggleReady(socket) {
@@ -373,6 +404,7 @@ function toggleReady(socket) {
 
   maybeStartCountdown(room);
   emitRoom(room);
+  emitPublicRooms();
 }
 
 function startQuestion(socket, tileIndex) {
@@ -610,6 +642,7 @@ function disconnectRoom(socket) {
     cancelCountdown(room, "");
     if (room.players.length === 0) {
       rooms.delete(roomNo);
+      emitPublicRooms();
       return;
     }
   } else {
@@ -619,9 +652,9 @@ function disconnectRoom(socket) {
   }
 
   emitRoom(room);
+  emitPublicRooms();
 }
 
-// 自動解除凍結
 setInterval(() => {
   for (const room of rooms.values()) {
     if (!room.started || room.finished) continue;
@@ -650,6 +683,8 @@ setInterval(() => {
 }, 500);
 
 io.on("connection", (socket) => {
+  socket.emit("public_rooms", getPublicRooms());
+
   socket.on("join_room", (payload) => joinRoom(socket, payload));
   socket.on("toggle_ready", () => toggleReady(socket));
   socket.on("start_question", ({ tileIndex }) => startQuestion(socket, Number(tileIndex)));
