@@ -556,13 +556,6 @@
             <div class="side-box">
               <h3>技能 / 提示</h3>
               <div id="skillButtonsWrap"></div>
-
-              <div style="margin-top:10px;">
-                <select id="targetPlayerSelect" class="select" style="margin-bottom:10px;">
-                  <option value="">選擇技能目標玩家</option>
-                </select>
-              </div>
-
               <div id="previewContent" class="skill-note">等待遊戲開始。</div>
             </div>
           </div>
@@ -631,7 +624,7 @@
       { id: "scholar", name: "學霸", skillText: "刪 2 ×3", imageCandidates: ["static/characters/scholar.png", "static/characters/scholar.PNG"] },
       { id: "landlord", name: "霸道地主", skillText: "霸佔 ×1", imageCandidates: ["static/characters/landlord.png", "static/characters/landlord.PNG"] },
       { id: "prophet", name: "先知", skillText: "被動：顯示全部題型", imageCandidates: ["static/characters/prophet.png", "static/characters/prophet.PNG"] },
-      { id: "timeMaster", name: "時間大師", skillText: "凍結 5 秒 ×1", imageCandidates: ["static/characters/time-master.png", "static/characters/time-master.PNG", "static/characters/timeMaster.png", "static/characters/timeMaster.PNG", "static/characters/timemaster.png", "static/characters/timemaster.PNG", "static/characters/時間大師.png"] },
+      { id: "timeMaster", name: "時間大師", skillText: "凍結全部玩家 5 秒 ×1", imageCandidates: ["static/characters/time-master.png", "static/characters/time-master.PNG", "static/characters/timeMaster.png", "static/characters/timeMaster.PNG", "static/characters/timemaster.png", "static/characters/timemaster.PNG", "static/characters/時間大師.png"] },
       { id: "bombMan", name: "炸彈怪客", skillText: "炸彈 ×1", imageCandidates: ["static/characters/bomb-man.png", "static/characters/bomb-man.PNG"] }
     ];
 
@@ -640,7 +633,8 @@
       room: null,
       selectedTileIndex: null,
       timerInterval: null,
-      countdownInterval: null
+      countdownInterval: null,
+      expireAt: 0
     };
 
     const roleGrid = document.getElementById("roleGrid");
@@ -666,7 +660,6 @@
     const readyBtn = document.getElementById("readyBtn");
     const lobbyInfo = document.getElementById("lobbyInfo");
     const countdownBox = document.getElementById("countdownBox");
-    const targetPlayerSelect = document.getElementById("targetPlayerSelect");
 
     function getRoleImage(role) {
       return role.imageCandidates[0];
@@ -709,6 +702,7 @@
     function movableIndexesForSelf() {
       const me = myPlayer();
       if (!me || me.ended || !state.room) return [];
+      if (me.status === "凍結中") return [];
       return getNeighbors(me.position, state.room.mapSize).filter((i) => {
         const tile = state.room.board[i];
         if (!tile) return false;
@@ -797,19 +791,6 @@
       return (state.room?.players || []).filter((p) => p.position === index);
     }
 
-    function renderTargetPlayers() {
-      targetPlayerSelect.innerHTML = `<option value="">選擇技能目標玩家</option>`;
-      const me = myPlayer();
-      (state.room?.players || [])
-        .filter((p) => p.id !== me?.id && !p.ended)
-        .forEach((p) => {
-          const option = document.createElement("option");
-          option.value = p.id;
-          option.textContent = p.nickname;
-          targetPlayerSelect.appendChild(option);
-        });
-    }
-
     function renderMap() {
       if (!state.room?.started) return;
       mapGrid.innerHTML = "";
@@ -836,7 +817,6 @@
         if (!available && tile.status !== "blocked") cls += " unavailable";
 
         div.className = cls;
-
         div.innerHTML = `
           <div class="tile-header">#${tile.index + 1}</div>
           <div class="tile-type">${tile.visibleType}</div>
@@ -885,6 +865,8 @@
 
       if (me.ended) {
         previewContent.textContent = "你已結束，等待其他玩家結算。";
+      } else if (me.status === "凍結中") {
+        previewContent.textContent = "你目前被凍結中，暫時不能行動。";
       } else {
         previewContent.textContent = "請點選你目前可走的鄰近格。";
       }
@@ -919,11 +901,9 @@
       if (me.counts?.freeze > 0) {
         const btn = document.createElement("button");
         btn.className = "btn skill-btn skill-blue";
-        btn.textContent = `⏱️ 凍結 (${me.counts.freeze})`;
+        btn.textContent = `⏱️ 凍結全部玩家 (${me.counts.freeze})`;
         btn.onclick = () => {
-          const target = targetPlayerSelect.value;
-          if (!target) return alert("請先選擇目標玩家");
-          socket.emit("use_skill", { skill: "freeze", targetPlayerId: target });
+          socket.emit("use_skill", { skill: "freeze" });
         };
         skillButtonsWrap.appendChild(btn);
       }
@@ -969,7 +949,6 @@
 
       renderLobby();
       renderPlayers();
-      renderTargetPlayers();
 
       if (state.room.started) {
         renderMap();
@@ -984,6 +963,7 @@
       const me = myPlayer();
       if (!state.room?.started || state.room?.finished) return;
       if (!me || me.ended) return alert("你已經結束");
+      if (me.status === "凍結中") return alert("你目前被凍結中");
 
       const movable = movableIndexesForSelf();
       const tile = state.room.board[index];
@@ -1041,7 +1021,7 @@
     document.getElementById("tileModalCancelBtn").addEventListener("click", () => {
       state.selectedTileIndex = null;
       tileModal.classList.remove("show");
-      renderMap();
+      if (state.room?.started) renderMap();
     });
 
     document.getElementById("tileModalConfirmBtn").addEventListener("click", () => {
