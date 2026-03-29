@@ -71,7 +71,7 @@ function nowText() {
 
 function addLog(room, msg) {
   room.logs.push(`${nowText()} ${msg}`);
-  room.logs = room.logs.slice(-100);
+  room.logs = room.logs.slice(-120);
 }
 
 function createBoard(size) {
@@ -102,6 +102,7 @@ function getNeighbors(index, size) {
 
 function getMovableIndexes(room, player) {
   if (!player || player.ended) return [];
+  if (player.frozenUntil && Date.now() < player.frozenUntil) return [];
   return getNeighbors(player.position, room.mapSize).filter((i) => {
     const tile = room.board[i];
     if (!tile) return false;
@@ -257,6 +258,7 @@ function startGame(room) {
     p.pendingQuestion = null;
     p.pendingTileIndex = null;
     p.pendingExpireAt = 0;
+    p.removedOptions = [];
 
     const tile = room.board[p.position];
     tile.owner = p.id;
@@ -293,6 +295,11 @@ function joinRoom(socket, payload) {
   const mapSize = Number(payload.mapSize || 5);
   const playerLimit = Number(payload.playerLimit || 2);
   const mode = payload.mode || "mix";
+
+  if (!roomNo) {
+    socket.emit("join_error", "請輸入房號");
+    return;
+  }
 
   if (!ROLE_CONFIG[roleId]) {
     socket.emit("join_error", "角色不存在");
@@ -371,6 +378,7 @@ function startQuestion(socket, tileIndex) {
   const { room, player } = getRoomPlayer(socket);
   if (!room || !player || !room.started || room.finished) return;
   if (player.ended) return;
+
   if (player.frozenUntil && Date.now() < player.frozenUntil) {
     socket.emit("action_error", "你目前被凍結中");
     return;
@@ -447,11 +455,14 @@ function useSkill(socket, payload) {
 
   const skill = payload.skill;
   const targetTileIndex = Number(payload.targetTileIndex);
-  const targetPlayerId = payload.targetPlayerId;
 
   if (skill === "delete2") {
-    if (player.counts.delete2 <= 0) return socket.emit("action_error", "刪2次數不足");
-    if (!player.pendingQuestion) return socket.emit("action_error", "請先開始答題");
+    if (player.counts.delete2 <= 0) {
+      return socket.emit("action_error", "刪2次數不足");
+    }
+    if (!player.pendingQuestion) {
+      return socket.emit("action_error", "請先開始答題");
+    }
 
     const wrong = player.pendingQuestion.options
       .map((_, i) => i)
@@ -468,9 +479,13 @@ function useSkill(socket, payload) {
   }
 
   if (skill === "occupy") {
-    if (player.counts.occupy <= 0) return socket.emit("action_error", "霸佔次數不足");
+    if (player.counts.occupy <= 0) {
+      return socket.emit("action_error", "霸佔次數不足");
+    }
     const movable = getMovableIndexes(room, player);
-    if (!movable.includes(targetTileIndex)) return socket.emit("action_error", "只能霸佔鄰近可走格子");
+    if (!movable.includes(targetTileIndex)) {
+      return socket.emit("action_error", "只能霸佔鄰近可走格子");
+    }
 
     const tile = room.board[targetTileIndex];
     tile.status = "owned";
@@ -486,9 +501,13 @@ function useSkill(socket, payload) {
   }
 
   if (skill === "bomb") {
-    if (player.counts.bomb <= 0) return socket.emit("action_error", "炸彈次數不足");
+    if (player.counts.bomb <= 0) {
+      return socket.emit("action_error", "炸彈次數不足");
+    }
     const movable = getMovableIndexes(room, player);
-    if (!movable.includes(targetTileIndex)) return socket.emit("action_error", "只能炸鄰近可走格子");
+    if (!movable.includes(targetTileIndex)) {
+      return socket.emit("action_error", "只能炸鄰近可走格子");
+    }
 
     const tile = room.board[targetTileIndex];
     tile.status = "blocked";
@@ -503,9 +522,13 @@ function useSkill(socket, payload) {
   }
 
   if (skill === "reset") {
-    if (player.counts.reset <= 0) return socket.emit("action_error", "重置次數不足");
+    if (player.counts.reset <= 0) {
+      return socket.emit("action_error", "重置次數不足");
+    }
     const tile = room.board[targetTileIndex];
-    if (!tile || tile.status !== "blocked") return socket.emit("action_error", "只能重置灰色格子");
+    if (!tile || tile.status !== "blocked") {
+      return socket.emit("action_error", "只能重置灰色格子");
+    }
 
     tile.status = "normal";
     tile.owner = null;
@@ -518,13 +541,23 @@ function useSkill(socket, payload) {
   }
 
   if (skill === "freeze") {
-    if (player.counts.freeze <= 0) return socket.emit("action_error", "凍結次數不足");
-    const target = room.players.find((p) => p.id === targetPlayerId && p.id !== player.id && !p.ended);
-    if (!target) return socket.emit("action_error", "請選擇有效的對手");
+    if (player.counts.freeze <= 0) {
+      return socket.emit("action_error", "凍結次數不足");
+    }
 
-    target.frozenUntil = Date.now() + 5000;
+    const targets = room.players.filter((p) => p.id !== player.id && !p.ended);
+    if (targets.length === 0) {
+      return socket.emit("action_error", "目前沒有可凍結的其他玩家");
+    }
+
+    const freezeUntil = Date.now() + 5000;
+    targets.forEach((target) => {
+      target.frozenUntil = freezeUntil;
+      target.status = "凍結中";
+    });
+
     player.counts.freeze -= 1;
-    addLog(room, `${player.nickname} 使用技能：凍結 ${target.nickname} 5 秒`);
+    addLog(room, `${player.nickname} 使用技能：凍結全部其他玩家 5 秒`);
     emitRoom(room);
     return;
   }
