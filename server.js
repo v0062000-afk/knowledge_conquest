@@ -71,7 +71,7 @@ function nowText() {
 
 function addLog(room, msg) {
   room.logs.push(`${nowText()} ${msg}`);
-  room.logs = room.logs.slice(-120);
+  room.logs = room.logs.slice(-150);
 }
 
 function createBoard(size) {
@@ -483,9 +483,18 @@ function useSkill(socket, payload) {
     if (player.counts.occupy <= 0) {
       return socket.emit("action_error", "霸佔次數不足");
     }
-    const movable = getMovableIndexes(room, player);
-    if (!movable.includes(targetTileIndex)) {
-      return socket.emit("action_error", "只能霸佔鄰近可走格子");
+
+    if (Number.isNaN(targetTileIndex) || targetTileIndex < 0 || targetTileIndex >= room.board.length) {
+      return socket.emit("action_error", "霸佔目標格子無效");
+    }
+
+    const neighborIndexes = getNeighbors(player.position, room.mapSize);
+    if (!neighborIndexes.includes(targetTileIndex)) {
+      return socket.emit("action_error", "只能霸佔鄰近格子");
+    }
+
+    if (targetTileIndex === player.position) {
+      return socket.emit("action_error", "不能霸佔自己目前所在格");
     }
 
     const tile = room.board[targetTileIndex];
@@ -611,6 +620,34 @@ function disconnectRoom(socket) {
 
   emitRoom(room);
 }
+
+// 自動解除凍結
+setInterval(() => {
+  for (const room of rooms.values()) {
+    if (!room.started || room.finished) continue;
+
+    let changed = false;
+
+    for (const player of room.players) {
+      if (
+        !player.ended &&
+        player.frozenUntil &&
+        Date.now() >= player.frozenUntil &&
+        player.status === "凍結中"
+      ) {
+        player.frozenUntil = 0;
+        player.status = "進行中";
+        addLog(room, `${player.nickname} 的凍結已解除`);
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      updateEndedPlayers(room);
+      emitRoom(room);
+    }
+  }
+}, 500);
 
 io.on("connection", (socket) => {
   socket.on("join_room", (payload) => joinRoom(socket, payload));
