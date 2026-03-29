@@ -217,7 +217,7 @@
       margin-bottom: 14px;
     }
 
-    .map-wrap, .skill-box, .preview-box, .question-box, .panel-box {
+    .map-wrap, .skill-box, .preview-box, .panel-box {
       background: rgba(255,255,255,.02);
       border: 1px solid rgba(132,144,255,.25);
       border-radius: 20px;
@@ -241,30 +241,46 @@
       cursor: pointer;
       transition: .15s ease;
       overflow: hidden;
+      opacity: 1;
     }
 
     .tile:hover {
       transform: translateY(-2px) scale(1.02);
-      border-color: #84a5ff;
     }
 
-    .tile.disabled {
-      opacity: .5;
-      cursor: not-allowed;
-      filter: grayscale(.2);
+    .tile.current-player-option {
+      border-color: #1ddf7a;
+      box-shadow: 0 0 0 3px rgba(29,223,122,.16) inset;
     }
 
-    .tile.preview {
-      box-shadow: 0 0 0 3px rgba(255,207,87,.65) inset;
+    .tile.current-player-pos {
       border-color: #ffcf57;
+      box-shadow: 0 0 0 3px rgba(255,207,87,.30) inset;
     }
 
-    .tile.owner-green {
-      background: linear-gradient(180deg, #214d47 0%, #153832 100%);
+    .tile.selected-preview {
+      border-color: #84a5ff;
+      box-shadow: 0 0 0 3px rgba(132,165,255,.25) inset;
     }
 
-    .tile.owner-red {
-      background: linear-gradient(180deg, #5a2b38 0%, #3d1a26 100%);
+    .tile.owner-p1 {
+      background: linear-gradient(180deg, #215e47 0%, #163f31 100%);
+    }
+
+    .tile.owner-p2 {
+      background: linear-gradient(180deg, #8a5f18 0%, #62420f 100%);
+    }
+
+    .tile.blocked {
+      background: linear-gradient(180deg, #4e4e61 0%, #3a3a49 100%);
+      opacity: .72;
+      cursor: not-allowed;
+      filter: grayscale(.15);
+    }
+
+    .tile.not-reachable {
+      opacity: .42;
+      cursor: not-allowed;
     }
 
     .tile-header {
@@ -318,7 +334,7 @@
     .marker-mini.m1 { top: 16px; left: 14px; }
     .marker-mini.m2 { top: 42px; right: 14px; }
 
-    .skill-box h3, .preview-box h3, .question-box h3, .panel-box h3 {
+    .skill-box h3, .preview-box h3, .panel-box h3 {
       margin: 0 0 12px;
       font-size: 18px;
       font-weight: 900;
@@ -375,68 +391,6 @@
       border-radius: 999px;
       font-weight: 900;
       margin-bottom: 12px;
-    }
-
-    .question-card {
-      background: #171938;
-      border: 1px solid rgba(132,144,255,.25);
-      border-radius: 18px;
-      padding: 14px;
-      display: none;
-    }
-
-    .question-card.show { display: block; }
-
-    .question-text {
-      font-size: 18px;
-      font-weight: 900;
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-
-    .options {
-      display: grid;
-      gap: 10px;
-    }
-
-    .option {
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(132,144,255,.22);
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .option:hover { border-color: #84a5ff; }
-
-    .option.selected {
-      border-color: #60a0ff;
-      background: rgba(96,160,255,.16);
-    }
-
-    .result-box {
-      margin-top: 12px;
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-weight: 900;
-      display: none;
-      line-height: 1.6;
-    }
-
-    .result-box.show { display: block; }
-
-    .result-correct {
-      background: rgba(27,181,110,.16);
-      color: #c9ffe6;
-      border: 1px solid rgba(27,181,110,.38);
-    }
-
-    .result-wrong {
-      background: rgba(225,80,80,.16);
-      color: #ffd7d7;
-      border: 1px solid rgba(225,80,80,.35);
     }
 
     .player-list {
@@ -608,6 +562,50 @@
       margin-top: 14px;
     }
 
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(132,144,255,.22);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 800;
+      transition: .15s ease;
+    }
+
+    .option:hover {
+      border-color: #84a5ff;
+      transform: translateY(-1px);
+    }
+
+    .result-box {
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 900;
+      display: none;
+      line-height: 1.6;
+    }
+
+    .result-box.show { display: block; }
+
+    .result-correct {
+      background: rgba(27,181,110,.16);
+      color: #c9ffe6;
+      border: 1px solid rgba(27,181,110,.38);
+    }
+
+    .result-wrong {
+      background: rgba(225,80,80,.16);
+      color: #ffd7d7;
+      border: 1px solid rgba(225,80,80,.35);
+    }
+
     @media (min-width: 901px) {
       .mobile-modal {
         align-items: center;
@@ -630,7 +628,6 @@
       .row, .role-grid, .mode-grid { grid-template-columns: 1fr; }
       .tile { width: 82px; height: 82px; }
       .title { font-size: 36px; }
-      .mapGrid { gap: 10px; }
     }
   </style>
 </head>
@@ -654,8 +651,6 @@
         </select>
         <select id="playerCountSelect" class="select">
           <option value="2">2人</option>
-          <option value="3">3人</option>
-          <option value="4">4人</option>
         </select>
       </div>
 
@@ -677,14 +672,17 @@
             <div class="chip" id="chipRoom">房間：123</div>
             <div class="chip" id="chipMap">地圖：3x3</div>
             <div class="chip" id="chipPlayers">人數上限：2</div>
-            <div class="chip" id="chipMode">題庫：普通題型</div>
+            <div class="chip" id="chipMode">題庫：綜合題型</div>
             <div class="chip" id="chipStatus">狀態：進行中</div>
+            <div class="chip" id="chipTurn">回合：你</div>
           </div>
 
           <div class="legend">
-            <div class="legend-item"><span class="legend-color" style="background:#1bb56e;"></span> 綠框 - 可挑戰</div>
-            <div class="legend-item"><span class="legend-color" style="background:#ffb347;"></span> 黃框 - 你的位置</div>
-            <div class="legend-item"><span class="legend-color" style="background:#e15050;"></span> 灰色 - 不可再前進</div>
+            <div class="legend-item"><span class="legend-color" style="background:#1ddf7a;"></span> 綠框 - 本回合可挑戰</div>
+            <div class="legend-item"><span class="legend-color" style="background:#ffcf57;"></span> 黃框 - 目前玩家位置</div>
+            <div class="legend-item"><span class="legend-color" style="background:#215e47;"></span> 綠底 - 玩家1占領</div>
+            <div class="legend-item"><span class="legend-color" style="background:#8a5f18;"></span> 金底 - 玩家2占領</div>
+            <div class="legend-item"><span class="legend-color" style="background:#4e4e61;"></span> 灰底 - 答錯封鎖</div>
           </div>
 
           <div class="map-and-skill">
@@ -695,31 +693,19 @@
             <div class="skill-box">
               <h3>技能操作</h3>
               <div id="skillButtonsWrap"></div>
-              <div class="skill-note" id="skillNote">
-                只有你選擇的角色技能會顯示。<br>
-                共通技能：重置灰格。
+              <div class="skill-note">
+                只有你的角色技能會顯示。<br>
+                共通技能：重置灰格。<br>
+                只能挑戰上下左右鄰近格子。
               </div>
             </div>
           </div>
 
-          <div class="preview-box" style="margin-bottom:14px;">
+          <div class="preview-box">
             <h3>格子預覽</h3>
-            <div id="previewContent" class="muted">請點選地圖格子後，將以彈窗方式顯示提示。</div>
+            <div id="previewContent" class="muted">請點選本回合可挑戰的鄰近格子。</div>
             <div class="preview-actions">
-              <button id="confirmChallengeBtn" class="btn btn-confirm">📝 確認作答</button>
-              <button id="cancelPreviewBtn" class="btn btn-cancel">取消</button>
-            </div>
-          </div>
-
-          <div class="question-box">
-            <h3>題目挑戰</h3>
-            <div class="question-type-tag">⏳ 剩餘時間：<span id="timerText">15 秒</span></div>
-
-            <div id="questionCard" class="question-card">
-              <div id="questionText" class="question-text"></div>
-              <div id="optionsWrap" class="options"></div>
-              <button id="submitAnswerBtn" class="btn btn-confirm" style="margin-top:12px;">送出答案</button>
-              <div id="resultBox" class="result-box"></div>
+              <button id="cancelPreviewBtn" class="btn btn-cancel">取消選擇</button>
             </div>
           </div>
         </div>
@@ -742,7 +728,7 @@
   <div id="winnerModal" class="winner-modal">
     <div class="winner-card">
       <img id="winnerAvatar" src="" alt="winner">
-      <div class="winner-big">🎉 勝利！</div>
+      <div class="winner-big">🎉 遊戲結束</div>
       <div id="winnerText" class="winner-text"></div>
       <div id="winnerStat" class="winner-stat"></div>
       <button id="closeWinnerBtn" class="btn close-btn">關閉</button>
@@ -764,12 +750,11 @@
     <div class="mobile-sheet large">
       <div class="mobile-sheet-title">題目挑戰</div>
       <div class="question-type-tag">⏳ 剩餘時間：<span id="modalTimerText">15 秒</span></div>
-      <div id="modalQuestionText" class="question-text"></div>
+      <div id="modalQuestionText" class="mobile-sheet-content" style="font-size:20px;font-weight:900;margin-bottom:14px;"></div>
       <div id="modalOptionsWrap" class="options"></div>
       <div id="modalResultBox" class="result-box"></div>
       <div class="mobile-sheet-actions">
-        <button id="modalCloseBtn" class="btn btn-cancel">取消</button>
-        <button id="modalSubmitBtn" class="btn btn-confirm">送出答案</button>
+        <button id="modalCloseBtn" class="btn btn-cancel">關閉</button>
       </div>
     </div>
   </div>
@@ -801,7 +786,7 @@
       {
         id: "prophet",
         name: "先知",
-        skillText: "顯示題型",
+        skillText: "顯示題型 ×1",
         shortRole: "先知",
         imageCandidates: [
           "static/characters/prophet.png",
@@ -812,7 +797,7 @@
       {
         id: "timeMaster",
         name: "時間大師",
-        skillText: "凍結 5 秒",
+        skillText: "凍結 5 秒 ×1",
         shortRole: "時間大師",
         imageCandidates: [
           "static/characters/time-master.png",
@@ -849,15 +834,18 @@
       normal: [
         { type: "國文", q: "「望梅止渴」主要是在形容什麼？", options: ["真正解渴", "以想像安慰自己", "梅子很好吃", "口渴不能忍"], answer: 1, explain: "是用想像來暫時安慰自己。" },
         { type: "數學", q: "15 + 27 = ?", options: ["40", "41", "42", "43"], answer: 2, explain: "15 + 27 = 42。" },
-        { type: "地理", q: "台灣的首都是哪裡？", options: ["台中", "高雄", "台北", "台南"], answer: 2, explain: "台灣首都為台北。" }
+        { type: "地理", q: "台灣的首都是哪裡？", options: ["台中", "高雄", "台北", "台南"], answer: 2, explain: "台灣首都為台北。" },
+        { type: "科學", q: "地球繞著哪一個天體運行？", options: ["月亮", "火星", "太陽", "木星"], answer: 2, explain: "地球繞太陽公轉。" }
       ],
       hard: [
         { type: "歷史", q: "鄭成功主要驅逐哪一個國家的勢力，收復台灣？", options: ["英國", "西班牙", "葡萄牙", "荷蘭"], answer: 3, explain: "鄭成功驅逐荷蘭勢力。" },
-        { type: "科學", q: "水的化學式為何？", options: ["CO2", "H2O", "O2", "NaCl"], answer: 1, explain: "水的化學式是 H2O。" }
+        { type: "科學", q: "水的化學式為何？", options: ["CO2", "H2O", "O2", "NaCl"], answer: 1, explain: "水的化學式是 H2O。" },
+        { type: "地理", q: "世界上面積最大的海洋是？", options: ["大西洋", "印度洋", "太平洋", "北冰洋"], answer: 2, explain: "面積最大的是太平洋。" }
       ],
       super: [
         { type: "數學", q: "三角形兩角為 35 度與 65 度，第三角為？", options: ["70 度", "75 度", "80 度", "90 度"], answer: 2, explain: "180 - 35 - 65 = 80。" },
-        { type: "邏輯", q: "所有 A 都是 B，所有 B 都是 C，則何者正確？", options: ["所有 C 都是 A", "所有 A 都是 C", "A 和 C 無關", "所有 B 都是 A"], answer: 1, explain: "由傳遞性可知所有 A 都是 C。" }
+        { type: "邏輯", q: "所有 A 都是 B，所有 B 都是 C，則何者正確？", options: ["所有 C 都是 A", "所有 A 都是 C", "A 和 C 無關", "所有 B 都是 A"], answer: 1, explain: "由傳遞性可知所有 A 都是 C。" },
+        { type: "歷史", q: "清朝最後一位皇帝是？", options: ["康熙", "乾隆", "溥儀", "道光"], answer: 2, explain: "清朝最後一位皇帝是溥儀。" }
       ],
       mix: []
     };
@@ -867,17 +855,21 @@
       selectedMode: "mix",
       selectedRoleId: "timeMaster",
       selectedTileIndex: null,
+      selectedQuestionTileIndex: null,
       mapSize: 3,
       playerLimit: 2,
       roomNo: "123",
       nickname: "555",
       currentQuestion: null,
-      selectedAnswer: null,
       timer: 15,
       timerInterval: null,
       gameStarted: false,
       players: [],
-      board: []
+      board: [],
+      currentTurnPlayerId: "p2",
+      frozenPlayerId: null,
+      freezeUntil: 0,
+      winnerShown: false
     };
 
     const modeGrid = document.getElementById("modeGrid");
@@ -889,12 +881,6 @@
     const playerList = document.getElementById("playerList");
     const systemLog = document.getElementById("systemLog");
     const previewContent = document.getElementById("previewContent");
-    const questionCard = document.getElementById("questionCard");
-    const questionText = document.getElementById("questionText");
-    const optionsWrap = document.getElementById("optionsWrap");
-    const resultBox = document.getElementById("resultBox");
-    const submitAnswerBtn = document.getElementById("submitAnswerBtn");
-    const timerText = document.getElementById("timerText");
     const skillButtonsWrap = document.getElementById("skillButtonsWrap");
     const winnerModal = document.getElementById("winnerModal");
     const winnerAvatar = document.getElementById("winnerAvatar");
@@ -912,7 +898,6 @@
     const modalOptionsWrap = document.getElementById("modalOptionsWrap");
     const modalResultBox = document.getElementById("modalResultBox");
     const modalCloseBtn = document.getElementById("modalCloseBtn");
-    const modalSubmitBtn = document.getElementById("modalSubmitBtn");
 
     function log(msg) {
       const time = new Date();
@@ -924,7 +909,7 @@
     }
 
     function getModeName(id) {
-      return MODES.find(m => m.id === id)?.name || "普通題型";
+      return MODES.find(m => m.id === id)?.name || "綜合題型";
     }
 
     function getRoleById(id) {
@@ -996,6 +981,7 @@
           state.selectedRoleId = role.id;
           renderRoles();
         };
+
         roleGrid.appendChild(div);
       });
     }
@@ -1003,12 +989,13 @@
     function createBoard(size) {
       const types = ["國文", "數學", "歷史", "地理", "科學", "邏輯"];
       const board = [];
+
       for (let i = 0; i < size * size; i++) {
         board.push({
           index: i,
           type: types[i % types.length],
-          owner: null,
-          disabled: false
+          owner: null,      // "p1" / "p2" / null
+          status: "normal"  // normal / blocked / owned
         });
       }
       return board;
@@ -1017,6 +1004,7 @@
     function initPlayers() {
       const myRole = getRoleById(state.selectedRoleId);
       const enemyRole = ROLES.find(r => r.id !== state.selectedRoleId) || ROLES[0];
+      const size = state.mapSize;
 
       state.players = [
         {
@@ -1029,7 +1017,8 @@
           score: 1,
           status: "進行中",
           counts: { ...enemyRole.counts },
-          revealedTiles: []
+          revealedTiles: [],
+          isMe: false
         },
         {
           id: "p2",
@@ -1037,14 +1026,69 @@
           roleName: myRole.shortRole,
           avatar: getRoleImage(myRole),
           avatarFallbacks: myRole.imageCandidates,
-          position: state.mapSize - 1,
+          position: size - 1,
           score: 1,
           status: "進行中",
           counts: { ...myRole.counts },
-          isMe: true,
-          revealedTiles: []
+          revealedTiles: [],
+          isMe: true
         }
       ];
+
+      state.board[0].owner = "p1";
+      state.board[0].status = "owned";
+
+      state.board[size - 1].owner = "p2";
+      state.board[size - 1].status = "owned";
+    }
+
+    function getPlayerById(id) {
+      return state.players.find(p => p.id === id);
+    }
+
+    function getCurrentPlayer() {
+      return getPlayerById(state.currentTurnPlayerId);
+    }
+
+    function getOpponent(playerId) {
+      return state.players.find(p => p.id !== playerId);
+    }
+
+    function getModeQuestionPool() {
+      return QUESTIONS[state.selectedMode] || QUESTIONS.mix;
+    }
+
+    function getSimpleHint(type) {
+      if (["國文", "歷史", "地理"].includes(type)) return "📘 人文類";
+      if (["數學", "科學"].includes(type)) return "🔬 理科類";
+      if (["邏輯"].includes(type)) return "🧠 推理類";
+      return "❓ 未知";
+    }
+
+    function getNeighborIndexes(index, size) {
+      const row = Math.floor(index / size);
+      const col = index % size;
+      const result = [];
+
+      if (row > 0) result.push(index - size);
+      if (row < size - 1) result.push(index + size);
+      if (col > 0) result.push(index - 1);
+      if (col < size - 1) result.push(index + 1);
+
+      return result;
+    }
+
+    function getReachableIndexes(player) {
+      const neighbors = getNeighborIndexes(player.position, state.mapSize);
+      return neighbors.filter(i => {
+        const tile = state.board[i];
+        return tile && tile.status !== "blocked";
+      });
+    }
+
+    function isReachableForCurrentPlayer(index) {
+      const currentPlayer = getCurrentPlayer();
+      return getReachableIndexes(currentPlayer).includes(index);
     }
 
     function updateTopChips() {
@@ -1053,6 +1097,10 @@
       document.getElementById("chipPlayers").textContent = `人數上限：${state.playerLimit}`;
       document.getElementById("chipMode").textContent = `題庫：${getModeName(state.selectedMode)}`;
       document.getElementById("chipStatus").textContent = `狀態：${state.gameStarted ? "進行中" : "待開始"}`;
+
+      const current = getCurrentPlayer();
+      document.getElementById("chipTurn").textContent =
+        `回合：${current.isMe ? "你" : current.nickname}`;
     }
 
     function renderPlayers() {
@@ -1060,6 +1108,8 @@
       state.players.forEach((player, idx) => {
         const fallbackJson = JSON.stringify(player.avatarFallbacks || [player.avatar]).replace(/"/g, "&quot;");
         const card = document.createElement("div");
+        const turnMark = state.currentTurnPlayerId === player.id ? " ← 本回合" : "";
+
         card.className = "player-card";
         card.innerHTML = `
           <div class="player-top">
@@ -1072,7 +1122,7 @@
               onerror="handleImgFallback(this)"
             >
             <div>
-              <div class="player-name">${player.nickname}${player.isMe ? "（你）" : ""}</div>
+              <div class="player-name">${player.nickname}${player.isMe ? "（你）" : ""}${turnMark}</div>
               <div class="player-role">${player.roleName}</div>
             </div>
           </div>
@@ -1092,38 +1142,42 @@
       return state.players.filter(p => p.position === tileIndex);
     }
 
-    function getSimpleHint(type) {
-      if (["國文", "歷史", "地理"].includes(type)) return "📘 人文類";
-      if (["數學", "科學"].includes(type)) return "🔬 理科類";
-      if (["邏輯"].includes(type)) return "🧠 推理類";
-      return "❓ 未知";
-    }
-
     function renderMap() {
       mapGrid.innerHTML = "";
       mapGrid.style.gridTemplateColumns = `repeat(${state.mapSize}, 96px)`;
 
-      const me = state.players.find(p => p.isMe);
+      const currentPlayer = getCurrentPlayer();
+      const currentReachable = getReachableIndexes(currentPlayer);
 
       state.board.forEach(tile => {
         const div = document.createElement("div");
         const playersHere = playerAtTile(tile.index);
-        const isPreview = state.selectedTileIndex === tile.index;
-        const isMyPos = me && me.position === tile.index;
 
         let cls = "tile";
-        if (tile.owner === "green") cls += " owner-green";
-        if (tile.owner === "red") cls += " owner-red";
-        if (tile.disabled) cls += " disabled";
-        if (isPreview || isMyPos) cls += " preview";
+        if (tile.owner === "p1") cls += " owner-p1";
+        if (tile.owner === "p2") cls += " owner-p2";
+        if (tile.status === "blocked") cls += " blocked";
+        if (currentPlayer.position === tile.index) cls += " current-player-pos";
+        if (state.selectedTileIndex === tile.index) cls += " selected-preview";
+        if (currentReachable.includes(tile.index)) cls += " current-player-option";
+
+        const isBlocked = tile.status === "blocked";
+        const isCurrentPos = currentPlayer.position === tile.index;
+        const isReachable = currentReachable.includes(tile.index);
+
+        if (!isBlocked && !isCurrentPos && !isReachable) {
+          cls += " not-reachable";
+        }
+
         div.className = cls;
 
+        const myPlayer = state.players.find(p => p.isMe);
         const canSeeTrueType =
-          me &&
-          Array.isArray(me.revealedTiles) &&
-          me.revealedTiles.includes(tile.index);
+          myPlayer &&
+          Array.isArray(myPlayer.revealedTiles) &&
+          myPlayer.revealedTiles.includes(tile.index);
 
-        const displayLabel = canSeeTrueType ? tile.type : "❓";
+        const displayLabel = canSeeTrueType ? tile.type : "?";
 
         div.innerHTML = `
           <div class="tile-header">#${tile.index + 1}</div>
@@ -1147,20 +1201,8 @@
           const fb2 = JSON.stringify(playersHere[1].avatarFallbacks || [playersHere[1].avatar]).replace(/"/g, "&quot;");
           div.innerHTML += `
             <div class="two-markers">
-              <img
-                class="marker-mini m1"
-                src="${playersHere[0].avatar}"
-                alt="p1"
-                data-fallbacks="${fb1}"
-                data-index="0"
-                onerror="handleImgFallback(this)">
-              <img
-                class="marker-mini m2"
-                src="${playersHere[1].avatar}"
-                alt="p2"
-                data-fallbacks="${fb2}"
-                data-index="0"
-                onerror="handleImgFallback(this)">
+              <img class="marker-mini m1" src="${playersHere[0].avatar}" alt="p1" data-fallbacks="${fb1}" data-index="0" onerror="handleImgFallback(this)">
+              <img class="marker-mini m2" src="${playersHere[1].avatar}" alt="p2" data-fallbacks="${fb2}" data-index="0" onerror="handleImgFallback(this)">
             </div>
           `;
         }
@@ -1176,27 +1218,31 @@
 
       skillButtonsWrap.innerHTML = "";
       const buttons = [];
+      const myTurn = state.currentTurnPlayerId === me.id;
+
+      if (!myTurn) {
+        const tip = document.createElement("div");
+        tip.className = "skill-note";
+        tip.innerHTML = `目前不是你的回合。`;
+        skillButtonsWrap.appendChild(tip);
+        return;
+      }
 
       if (me.counts.delete2 > 0) {
         buttons.push({ text: `✂️ 刪2選項 (${me.counts.delete2})`, className: "skill-green", onClick: useDelete2 });
       }
-
       if (me.counts.occupy > 0) {
         buttons.push({ text: `🏰 霸佔 (${me.counts.occupy})`, className: "skill-orange", onClick: useOccupy });
       }
-
       if (me.counts.reveal > 0) {
         buttons.push({ text: `👁️ 顯示題型 (${me.counts.reveal})`, className: "skill-purple", onClick: useReveal });
       }
-
       if (me.counts.freeze > 0) {
         buttons.push({ text: `⏱️ 凍結 5 秒 (${me.counts.freeze})`, className: "skill-blue", onClick: useFreeze });
       }
-
       if (me.counts.bomb > 0) {
         buttons.push({ text: `💣 炸彈 (${me.counts.bomb})`, className: "skill-red", onClick: useBomb });
       }
-
       if (me.counts.reset > 0) {
         buttons.push({ text: `🔄 重置灰格 (${me.counts.reset})`, className: "skill-red", onClick: useResetTile });
       }
@@ -1211,12 +1257,21 @@
     }
 
     function onTileClick(index) {
-      const tile = state.board[index];
-      if (tile.disabled) {
-        log(`格子 #${index + 1} 已不可用。`);
+      if (!state.gameStarted || state.winnerShown) return;
+
+      const currentPlayer = getCurrentPlayer();
+
+      if (currentPlayer.isMe !== true) {
+        alert("目前不是你的回合");
         return;
       }
 
+      if (!isReachableForCurrentPlayer(index)) {
+        alert("只能點上下左右鄰近且不是灰色的格子");
+        return;
+      }
+
+      const tile = state.board[index];
       state.selectedTileIndex = index;
 
       const me = state.players.find(p => p.isMe);
@@ -1227,18 +1282,22 @@
 
       const hintText = canSeeTrueType ? tile.type : getSimpleHint(tile.type);
 
+      const ownerText =
+        tile.owner === "p1" ? "玩家1" :
+        tile.owner === "p2" ? "玩家2" : "無";
+
       tileModalContent.innerHTML = `
         格子編號：#${tile.index + 1}<br>
         題型提示：${hintText}<br>
-        目前占領：${tile.owner === "green" ? "綠隊" : tile.owner === "red" ? "紅隊" : "無"}<br>
-        狀態：${tile.disabled ? "不可前進" : "可挑戰"}
+        目前占領：${ownerText}<br>
+        狀態：${tile.status === "blocked" ? "不可前進" : "可挑戰"}
       `;
 
       previewContent.innerHTML = `
         格子編號：#${tile.index + 1}<br>
         題型提示：${hintText}<br>
-        目前占領：${tile.owner === "green" ? "綠隊" : tile.owner === "red" ? "紅隊" : "無"}<br>
-        狀態：${tile.disabled ? "不可前進" : "可挑戰"}
+        目前占領：${ownerText}<br>
+        狀態：${tile.status === "blocked" ? "不可前進" : "可挑戰"}
       `;
 
       tileModal.classList.add("show");
@@ -1247,146 +1306,211 @@
     }
 
     function getRandomQuestion() {
-      const pool = QUESTIONS[state.selectedMode] || QUESTIONS.normal;
-      return pool[Math.floor(Math.random() * pool.length)];
+      const pool = getModeQuestionPool();
+      return JSON.parse(JSON.stringify(pool[Math.floor(Math.random() * pool.length)]));
     }
 
     function startQuestion() {
       if (state.selectedTileIndex === null) {
-        alert("請先點選一個地圖格子");
+        alert("請先點選格子");
         return;
       }
 
+      state.selectedQuestionTileIndex = state.selectedTileIndex;
+      state.currentQuestion = getRandomQuestion();
+
       tileModal.classList.remove("show");
-
-      state.currentQuestion = JSON.parse(JSON.stringify(getRandomQuestion()));
-      state.selectedAnswer = null;
-
-      questionText.textContent = state.currentQuestion.q;
       modalQuestionText.textContent = state.currentQuestion.q;
-
-      optionsWrap.innerHTML = "";
       modalOptionsWrap.innerHTML = "";
-
-      resultBox.className = "result-box";
-      resultBox.textContent = "";
       modalResultBox.className = "result-box";
       modalResultBox.textContent = "";
 
       state.currentQuestion.options.forEach((opt, idx) => {
-        const makeOption = (targetWrap) => {
-          const btn = document.createElement("div");
-          btn.className = "option";
-          btn.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
-          btn.onclick = () => {
-            state.selectedAnswer = idx;
-
-            [...optionsWrap.children].forEach(c => c.classList.remove("selected"));
-            [...modalOptionsWrap.children].forEach(c => c.classList.remove("selected"));
-
-            if (targetWrap === optionsWrap) {
-              if (optionsWrap.children[idx]) optionsWrap.children[idx].classList.add("selected");
-              if (modalOptionsWrap.children[idx]) modalOptionsWrap.children[idx].classList.add("selected");
-            } else {
-              if (modalOptionsWrap.children[idx]) modalOptionsWrap.children[idx].classList.add("selected");
-              if (optionsWrap.children[idx]) optionsWrap.children[idx].classList.add("selected");
-            }
-          };
-          return btn;
+        const option = document.createElement("div");
+        option.className = "option";
+        option.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+        option.onclick = () => {
+          answerQuestion(idx);
         };
-
-        optionsWrap.appendChild(makeOption(optionsWrap));
-        modalOptionsWrap.appendChild(makeOption(modalOptionsWrap));
+        modalOptionsWrap.appendChild(option);
       });
 
-      questionCard.classList.add("show");
       questionModal.classList.add("show");
       startTimer();
-      log(`開始作答：${state.currentQuestion.type} 題`);
+      log(`開始挑戰格子 #${state.selectedQuestionTileIndex + 1}`);
     }
 
     function startTimer() {
       clearInterval(state.timerInterval);
       state.timer = 15;
-      timerText.textContent = `${state.timer} 秒`;
       modalTimerText.textContent = `${state.timer} 秒`;
 
       state.timerInterval = setInterval(() => {
         state.timer--;
-        timerText.textContent = `${state.timer} 秒`;
         modalTimerText.textContent = `${state.timer} 秒`;
 
         if (state.timer <= 0) {
           clearInterval(state.timerInterval);
-          handleAnswer(true);
+          answerQuestion(-1, true);
         }
       }, 1000);
     }
 
-    function handleAnswer(timeout = false) {
-      clearInterval(state.timerInterval);
+    function answerQuestion(selectedIndex, isTimeout = false) {
       if (!state.currentQuestion) return;
 
-      if (timeout) {
-        const msg = `時間到，答題失敗。正確答案：${state.currentQuestion.options[state.currentQuestion.answer]}。${state.currentQuestion.explain}`;
-        resultBox.className = "result-box result-wrong show";
-        resultBox.textContent = msg;
-        modalResultBox.className = "result-box result-wrong show";
-        modalResultBox.textContent = msg;
-        log("答題超時，挑戰失敗。");
-        disableSelectedTile();
-        state.currentQuestion = null;
-        return;
-      }
+      clearInterval(state.timerInterval);
 
-      if (state.selectedAnswer === null) {
-        alert("請先選擇答案");
-        return;
-      }
-
-      const correct = state.selectedAnswer === state.currentQuestion.answer;
-      const me = state.players.find(p => p.isMe);
-      const tile = state.board[state.selectedTileIndex];
+      const tileIndex = state.selectedQuestionTileIndex;
+      const tile = state.board[tileIndex];
+      const currentPlayer = getCurrentPlayer();
+      const correct = !isTimeout && selectedIndex === state.currentQuestion.answer;
 
       if (correct) {
-        const msg = `答對了！${state.currentQuestion.explain}`;
-        resultBox.className = "result-box result-correct show";
-        resultBox.textContent = msg;
+        tile.status = "owned";
+        tile.owner = currentPlayer.id;
+        currentPlayer.position = tileIndex;
+
+        recomputeScores();
+
         modalResultBox.className = "result-box result-correct show";
-        modalResultBox.textContent = msg;
-
-        me.position = tile.index;
-        if (tile.owner === null) me.score += 1;
-        tile.owner = "red";
-        log(`答對並成功占領格子 #${tile.index + 1}`);
+        modalResultBox.textContent = `答對了！已占領格子 #${tileIndex + 1}。${state.currentQuestion.explain}`;
+        log(`${currentPlayer.nickname} 答對，占領格子 #${tileIndex + 1}`);
       } else {
-        const msg = `答錯了。正確答案：${state.currentQuestion.options[state.currentQuestion.answer]}。${state.currentQuestion.explain}`;
-        resultBox.className = "result-box result-wrong show";
-        resultBox.textContent = msg;
-        modalResultBox.className = "result-box result-wrong show";
-        modalResultBox.textContent = msg;
+        tile.status = "blocked";
+        tile.owner = null;
 
-        disableSelectedTile();
-        log(`答錯，未占領格子 #${tile.index + 1}`);
+        modalResultBox.className = "result-box result-wrong show";
+        modalResultBox.textContent = isTimeout
+          ? `時間到！格子 #${tileIndex + 1} 已變灰。正確答案：${state.currentQuestion.options[state.currentQuestion.answer]}。`
+          : `答錯了！格子 #${tileIndex + 1} 已變灰。正確答案：${state.currentQuestion.options[state.currentQuestion.answer]}。`;
+        log(`${currentPlayer.nickname} 挑戰失敗，格子 #${tileIndex + 1} 變灰`);
       }
 
-      state.currentQuestion = null;
       renderPlayers();
       renderMap();
       renderSkillButtons();
-      checkWinner();
+
+      setTimeout(() => {
+        questionModal.classList.remove("show");
+        state.currentQuestion = null;
+        state.selectedQuestionTileIndex = null;
+        state.selectedTileIndex = null;
+        modalResultBox.className = "result-box";
+        modalResultBox.textContent = "";
+        nextTurn();
+      }, 900);
     }
 
-    function disableSelectedTile() {
-      if (state.selectedTileIndex === null) return;
-      state.board[state.selectedTileIndex].disabled = true;
+    function recomputeScores() {
+      state.players.forEach(p => p.score = 0);
+      state.board.forEach(tile => {
+        if (tile.owner === "p1") {
+          const p1 = getPlayerById("p1");
+          if (p1) p1.score += 1;
+        }
+        if (tile.owner === "p2") {
+          const p2 = getPlayerById("p2");
+          if (p2) p2.score += 1;
+        }
+      });
+    }
+
+    function nextTurn() {
+      if (state.winnerShown) return;
+
+      const oldPlayer = getCurrentPlayer();
+      const nextPlayer = getOpponent(oldPlayer.id);
+
+      state.currentTurnPlayerId = nextPlayer.id;
+      updateTopChips();
+      renderPlayers();
       renderMap();
+      renderSkillButtons();
+
+      if (Date.now() < state.freezeUntil && state.currentTurnPlayerId === state.frozenPlayerId) {
+        log(`${nextPlayer.nickname} 被凍結，本回合跳過`);
+        state.currentTurnPlayerId = oldPlayer.id;
+        state.freezeUntil = 0;
+        state.frozenPlayerId = null;
+        updateTopChips();
+      }
+
+      const nowCurrent = getCurrentPlayer();
+      const currentMoves = getReachableIndexes(nowCurrent);
+
+      if (currentMoves.length === 0) {
+        const other = getOpponent(nowCurrent.id);
+        const otherMoves = getReachableIndexes(other);
+
+        if (otherMoves.length === 0) {
+          log("雙方都無法前進，遊戲結算");
+          endGame();
+          return;
+        } else {
+          log(`${nowCurrent.nickname} 鄰近格子都不能走，跳過回合`);
+          state.currentTurnPlayerId = other.id;
+          updateTopChips();
+          renderPlayers();
+          renderMap();
+          renderSkillButtons();
+
+          const retryCurrent = getCurrentPlayer();
+          const retryMoves = getReachableIndexes(retryCurrent);
+          if (retryMoves.length === 0) {
+            log("雙方皆無路可走，遊戲結算");
+            endGame();
+            return;
+          }
+        }
+      }
+
+      if (getCurrentPlayer().isMe) {
+        log("輪到你了");
+      } else {
+        simulateEnemyTurn();
+      }
+    }
+
+    function simulateEnemyTurn() {
+      const enemy = getCurrentPlayer();
+      const moves = getReachableIndexes(enemy);
+
+      if (moves.length === 0) {
+        nextTurn();
+        return;
+      }
+
+      const targetIndex = moves[Math.floor(Math.random() * moves.length)];
+      const question = getRandomQuestion();
+      const correct = Math.random() > 0.35;
+
+      setTimeout(() => {
+        const tile = state.board[targetIndex];
+        if (correct) {
+          tile.status = "owned";
+          tile.owner = enemy.id;
+          enemy.position = targetIndex;
+          recomputeScores();
+          log(`${enemy.nickname} 挑戰成功，占領格子 #${targetIndex + 1}`);
+        } else {
+          tile.status = "blocked";
+          tile.owner = null;
+          log(`${enemy.nickname} 挑戰失敗，格子 #${targetIndex + 1} 變灰`);
+        }
+
+        renderPlayers();
+        renderMap();
+        renderSkillButtons();
+        nextTurn();
+      }, 900);
     }
 
     function useDelete2() {
       const me = state.players.find(p => p.isMe);
+      if (state.currentTurnPlayerId !== me.id) return alert("目前不是你的回合");
       if (me.counts.delete2 <= 0) return alert("刪2次數不足");
-      if (!state.currentQuestion) return alert("請先開始作答");
+      if (!state.currentQuestion) return alert("請先開始答題");
 
       const wrongIndexes = state.currentQuestion.options
         .map((_, i) => i)
@@ -1394,20 +1518,15 @@
 
       const removeList = wrongIndexes.sort(() => Math.random() - 0.5).slice(0, 2);
 
-      const applyRemove = (wrap) => {
-        [...wrap.children].forEach((optEl, i) => {
-          if (removeList.includes(i)) {
-            optEl.style.opacity = "0.35";
-            optEl.style.pointerEvents = "none";
-            if (!optEl.textContent.includes("（已刪除）")) {
-              optEl.textContent += "（已刪除）";
-            }
+      [...modalOptionsWrap.children].forEach((optEl, i) => {
+        if (removeList.includes(i)) {
+          optEl.style.opacity = "0.35";
+          optEl.style.pointerEvents = "none";
+          if (!optEl.textContent.includes("（已刪除）")) {
+            optEl.textContent += "（已刪除）";
           }
-        });
-      };
-
-      applyRemove(optionsWrap);
-      applyRemove(modalOptionsWrap);
+        }
+      });
 
       me.counts.delete2--;
       renderPlayers();
@@ -1417,12 +1536,16 @@
 
     function useResetTile() {
       const me = state.players.find(p => p.isMe);
+      if (state.currentTurnPlayerId !== me.id) return alert("目前不是你的回合");
       if (me.counts.reset <= 0) return alert("重置次數不足");
 
-      const target = state.board.find(t => t.disabled);
-      if (!target) return alert("目前沒有灰色格可重置");
+      const blockedTiles = state.board.filter(t => t.status === "blocked");
+      if (blockedTiles.length === 0) return alert("目前沒有灰格可重置");
 
-      target.disabled = false;
+      const target = blockedTiles[0];
+      target.status = "normal";
+      target.owner = null;
+
       me.counts.reset--;
       renderPlayers();
       renderMap();
@@ -1432,111 +1555,150 @@
 
     function useBomb() {
       const me = state.players.find(p => p.isMe);
+      if (state.currentTurnPlayerId !== me.id) return alert("目前不是你的回合");
       if (me.counts.bomb <= 0) return alert("炸彈次數不足");
-      if (state.selectedTileIndex === null) return alert("請先選一個格子");
+      if (state.selectedTileIndex === null) return alert("請先選擇一個鄰近格子");
 
       const tile = state.board[state.selectedTileIndex];
-      tile.disabled = true;
+      if (!isReachableForCurrentPlayer(tile.index)) return alert("只能炸鄰近格子");
+
+      tile.status = "blocked";
+      tile.owner = null;
       me.counts.bomb--;
+
+      recomputeScores();
       renderPlayers();
       renderMap();
       renderSkillButtons();
       tileModal.classList.remove("show");
-      log(`已對格子 #${tile.index + 1} 使用炸彈`);
+      previewContent.innerHTML = `已對格子 #${tile.index + 1} 使用炸彈。`;
+      log(`已使用技能：炸彈，格子 #${tile.index + 1} 變灰`);
     }
 
     function useFreeze() {
       const me = state.players.find(p => p.isMe);
+      if (state.currentTurnPlayerId !== me.id) return alert("目前不是你的回合");
       if (me.counts.freeze <= 0) return alert("凍結次數不足");
 
+      const enemy = getOpponent(me.id);
+      state.frozenPlayerId = enemy.id;
+      state.freezeUntil = Date.now() + 5000;
       me.counts.freeze--;
+
       renderPlayers();
       renderSkillButtons();
-      log("已使用技能：凍結對手 5 秒");
+      log(`已使用技能：凍結 ${enemy.nickname} 5 秒`);
     }
 
     function useOccupy() {
       const me = state.players.find(p => p.isMe);
+      if (state.currentTurnPlayerId !== me.id) return alert("目前不是你的回合");
       if (me.counts.occupy <= 0) return alert("霸佔次數不足");
-      if (state.selectedTileIndex === null) return alert("請先選擇一個格子");
+      if (state.selectedTileIndex === null) return alert("請先選擇一個鄰近格子");
+      if (!isReachableForCurrentPlayer(state.selectedTileIndex)) return alert("只能霸佔鄰近格子");
 
       const tile = state.board[state.selectedTileIndex];
-      if (tile.owner !== "red") {
-        tile.owner = "red";
-        me.score += 1;
-      }
+      tile.status = "owned";
+      tile.owner = me.id;
+      me.position = tile.index;
       me.counts.occupy--;
+
+      recomputeScores();
+      tileModal.classList.remove("show");
+      previewContent.innerHTML = `已直接霸佔格子 #${tile.index + 1}。`;
+
       renderPlayers();
       renderMap();
       renderSkillButtons();
-      tileModal.classList.remove("show");
-      log(`已使用技能：直接霸佔格子 #${tile.index + 1}`);
+      log(`已使用技能：霸佔格子 #${tile.index + 1}`);
+
+      state.selectedTileIndex = null;
+      nextTurn();
     }
 
     function useReveal() {
       const me = state.players.find(p => p.isMe);
+      if (state.currentTurnPlayerId !== me.id) return alert("目前不是你的回合");
       if (me.counts.reveal <= 0) return alert("顯示題型次數不足");
-      if (state.selectedTileIndex === null) return alert("請先點選格子");
+      if (state.selectedTileIndex === null) return alert("請先選擇一個鄰近格子");
 
-      if (!Array.isArray(me.revealedTiles)) me.revealedTiles = [];
       if (!me.revealedTiles.includes(state.selectedTileIndex)) {
         me.revealedTiles.push(state.selectedTileIndex);
       }
-
       me.counts.reveal--;
+
+      const tile = state.board[state.selectedTileIndex];
+      tileModalContent.innerHTML = `
+        格子編號：#${tile.index + 1}<br>
+        題型提示：${tile.type}<br>
+        先知技能已發動，可查看真正題型。
+      `;
+      previewContent.innerHTML = `
+        格子編號：#${tile.index + 1}<br>
+        題型提示：${tile.type}<br>
+        先知技能已發動，可查看真正題型。
+      `;
 
       renderPlayers();
       renderMap();
       renderSkillButtons();
-
-      const tile = state.board[state.selectedTileIndex];
-      const msg = `
-        格子編號：#${tile.index + 1}<br>
-        題型提示：${tile.type}<br>
-        先知技能已發動，可直接查看此格真正題型。
-      `;
-      tileModalContent.innerHTML = msg;
-      previewContent.innerHTML = msg;
-
       log(`已使用技能：顯示格子 #${tile.index + 1} 題型`);
     }
 
     function resetPreview() {
       state.selectedTileIndex = null;
-      previewContent.innerHTML = `請點選地圖格子後，將以彈窗方式顯示提示。`;
-      questionCard.classList.remove("show");
       tileModal.classList.remove("show");
-      questionModal.classList.remove("show");
-      clearInterval(state.timerInterval);
-      timerText.textContent = "15 秒";
-      modalTimerText.textContent = "15 秒";
+      previewContent.innerHTML = `請點選本回合可挑戰的鄰近格子。`;
       renderMap();
     }
 
-    function checkWinner() {
-      const doneCount = state.board.filter(t => t.owner !== null || t.disabled).length;
-      if (doneCount < state.board.length) return;
+    function endGame() {
+      if (state.winnerShown) return;
+      state.winnerShown = true;
+      clearInterval(state.timerInterval);
 
-      const me = state.players.find(p => p.isMe);
-      const enemy = state.players.find(p => !p.isMe);
-      const winner = me.score >= enemy.score ? me : enemy;
+      recomputeScores();
+      const p1 = getPlayerById("p1");
+      const p2 = getPlayerById("p2");
+      let winner = null;
+      let text = "";
+
+      if (p1.score > p2.score) {
+        winner = p1;
+        text = `${p1.nickname} 獲勝`;
+      } else if (p2.score > p1.score) {
+        winner = p2;
+        text = `${p2.nickname} 獲勝`;
+      } else {
+        winner = p2;
+        text = `平手`;
+      }
 
       winnerAvatar.src = winner.avatar;
       winnerAvatar.dataset.fallbacks = JSON.stringify(winner.avatarFallbacks || [winner.avatar]);
       winnerAvatar.dataset.index = "0";
       winnerAvatar.onerror = function() { handleImgFallback(this); };
 
-      winnerText.textContent = `${winner.nickname} 取得勝利`;
-      winnerStat.textContent = `佔領格數：${winner.score}`;
+      winnerText.textContent = text;
+      winnerStat.textContent = `玩家1：${p1.score} 格 ｜ 玩家2：${p2.score} 格`;
       winnerModal.classList.add("show");
-      log(`遊戲結束，${winner.nickname} 勝利。`);
+      document.getElementById("chipStatus").textContent = "狀態：已結算";
+      log("遊戲結束");
     }
 
     joinBtn.addEventListener("click", () => {
       state.roomNo = document.getElementById("roomInput").value.trim() || "123";
       state.nickname = document.getElementById("nicknameInput").value.trim() || "555";
       state.mapSize = parseInt(document.getElementById("mapSizeSelect").value, 10);
-      state.playerLimit = parseInt(document.getElementById("playerCountSelect").value, 10);
+      state.playerLimit = 2;
+      state.selectedTileIndex = null;
+      state.selectedQuestionTileIndex = null;
+      state.currentQuestion = null;
+      state.currentTurnPlayerId = "p2";
+      state.freezeUntil = 0;
+      state.frozenPlayerId = null;
+      state.winnerShown = false;
+
       state.board = createBoard(state.mapSize);
       initPlayers();
       state.gameStarted = true;
@@ -1550,17 +1712,15 @@
       renderSkillButtons();
 
       systemLog.textContent = "";
+      previewContent.innerHTML = "請點選本回合可挑戰的鄰近格子。";
       log(`遊戲開始，題庫模式：${getModeName(state.selectedMode)}`);
       log(`${state.nickname} 選擇角色：${getRoleById(state.selectedRoleId).name}`);
       log("成功加入房間");
+      log("輪到你了");
     });
 
-    document.getElementById("confirmChallengeBtn").addEventListener("click", startQuestion);
-    document.getElementById("cancelPreviewBtn").addEventListener("click", resetPreview);
-    submitAnswerBtn.addEventListener("click", () => handleAnswer(false));
-
     tileModalCancelBtn.addEventListener("click", () => {
-      tileModal.classList.remove("show");
+      resetPreview();
     });
 
     tileModalConfirmBtn.addEventListener("click", () => {
@@ -1569,11 +1729,10 @@
 
     modalCloseBtn.addEventListener("click", () => {
       questionModal.classList.remove("show");
-      clearInterval(state.timerInterval);
     });
 
-    modalSubmitBtn.addEventListener("click", () => {
-      handleAnswer(false);
+    document.getElementById("cancelPreviewBtn").addEventListener("click", () => {
+      resetPreview();
     });
 
     document.getElementById("closeWinnerBtn").addEventListener("click", () => {
