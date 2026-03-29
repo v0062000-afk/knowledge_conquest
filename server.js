@@ -198,7 +198,8 @@ function serializeRoomFor(socketId, room) {
       ended: p.ended,
       ready: !!p.ready,
       isSelf: p.socketId === socketId,
-      counts: p.socketId === socketId ? p.counts : undefined
+      counts: p.socketId === socketId ? p.counts : undefined,
+      frozenUntil: p.socketId === socketId ? p.frozenUntil : undefined
     })),
     logs: room.logs
   };
@@ -504,9 +505,14 @@ function useSkill(socket, payload) {
     if (player.counts.bomb <= 0) {
       return socket.emit("action_error", "炸彈次數不足");
     }
-    const movable = getMovableIndexes(room, player);
-    if (!movable.includes(targetTileIndex)) {
-      return socket.emit("action_error", "只能炸鄰近可走格子");
+
+    if (Number.isNaN(targetTileIndex) || targetTileIndex < 0 || targetTileIndex >= room.board.length) {
+      return socket.emit("action_error", "炸彈目標格子無效");
+    }
+
+    const occupiedByPlayer = room.players.some((p) => !p.ended && p.position === targetTileIndex);
+    if (occupiedByPlayer) {
+      return socket.emit("action_error", "不能炸目前有玩家站著的格子");
     }
 
     const tile = room.board[targetTileIndex];
@@ -525,9 +531,19 @@ function useSkill(socket, payload) {
     if (player.counts.reset <= 0) {
       return socket.emit("action_error", "重置次數不足");
     }
+
+    if (Number.isNaN(targetTileIndex) || targetTileIndex < 0 || targetTileIndex >= room.board.length) {
+      return socket.emit("action_error", "重置目標格子無效");
+    }
+
+    const neighborIndexes = getNeighbors(player.position, room.mapSize);
+    if (!neighborIndexes.includes(targetTileIndex)) {
+      return socket.emit("action_error", "只能重置鄰近的灰色格子");
+    }
+
     const tile = room.board[targetTileIndex];
     if (!tile || tile.status !== "blocked") {
-      return socket.emit("action_error", "只能重置灰色格子");
+      return socket.emit("action_error", "只能重置鄰近的灰色格子");
     }
 
     tile.status = "normal";
