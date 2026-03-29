@@ -891,7 +891,8 @@
       }
 
       const tick = () => {
-        const left = Math.max(0, Math.ceil((me.frozenUntil - Date.now()) / 1000));
+        const currentMe = myPlayer();
+        const left = Math.max(0, Math.ceil(((currentMe?.frozenUntil || 0) - Date.now()) / 1000));
         freezeCountdownText.textContent = `${left} 秒`;
 
         if (left <= 0) {
@@ -943,6 +944,8 @@
         previewContent.textContent = "請點選任意地圖格子，將它炸成灰色格。";
       } else if (state.activeSkillMode === "reset") {
         previewContent.textContent = "請點選鄰近的灰色格子進行重置。";
+      } else if (state.activeSkillMode === "occupy") {
+        previewContent.textContent = "請點選鄰近任一格，可直接搶灰格或其他玩家地盤。";
       } else {
         previewContent.textContent = "請點選你目前可走的鄰近格。";
       }
@@ -968,8 +971,8 @@
         btn.className = "btn skill-btn skill-orange";
         btn.textContent = `🏰 霸佔 (${me.counts.occupy})`;
         btn.onclick = () => {
-          if (state.selectedTileIndex == null) return alert("請先選格子");
-          socket.emit("use_skill", { skill: "occupy", targetTileIndex: state.selectedTileIndex });
+          state.activeSkillMode = "occupy";
+          previewContent.textContent = "請點選鄰近任一格，可直接搶灰格或其他玩家地盤。";
         };
         skillButtonsWrap.appendChild(btn);
       }
@@ -1057,6 +1060,19 @@
           return alert("只能點選鄰近的灰色格子");
         }
         socket.emit("use_skill", { skill: "reset", targetTileIndex: index });
+        state.activeSkillMode = null;
+        previewContent.textContent = "請點選你目前可走的鄰近格。";
+        return;
+      }
+
+      if (state.activeSkillMode === "occupy") {
+        if (!neighborIndexes.includes(index)) {
+          return alert("只能點選鄰近格子");
+        }
+        if (index === me.position) {
+          return alert("不能霸佔自己目前所在格");
+        }
+        socket.emit("use_skill", { skill: "occupy", targetTileIndex: index });
         state.activeSkillMode = null;
         previewContent.textContent = "請點選你目前可走的鄰近格。";
         return;
