@@ -5,49 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>知識爭奪戰</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: "Microsoft JhengHei", "Noto Sans TC", Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, #16193b 0%, #0d1028 45%, #090b1d 100%);
+      background: radial-gradient(circle at top left, #16193b 0%, #0d1028 45%, #090b1d 100%);
       color: #fff;
     }
 
     .app {
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
       padding: 18px 14px 28px;
     }
 
     .title {
-      font-size: 54px;
+      font-size: 58px;
       font-weight: 900;
-      letter-spacing: 1px;
-      margin: 6px 0 18px;
+      margin: 0 0 18px;
       text-shadow: 0 4px 16px rgba(0,0,0,.35);
     }
 
     .card {
-      background: rgba(47, 48, 92, 0.88);
+      background: rgba(47, 48, 92, 0.92);
       border: 1px solid rgba(119, 132, 255, 0.35);
-      border-radius: 22px;
+      border-radius: 24px;
       box-shadow: 0 14px 30px rgba(0,0,0,.22);
       overflow: hidden;
     }
 
     .setup-wrap {
-      padding: 18px 22px 16px;
+      padding: 22px;
       margin-bottom: 18px;
     }
 
     .section-title {
       font-size: 22px;
       font-weight: 900;
-      margin: 0 0 12px;
+      margin-bottom: 16px;
     }
 
     .row {
@@ -57,15 +53,7 @@
       margin-bottom: 14px;
     }
 
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .input,
-    .select,
-    .btn {
+    .input, .select, .btn {
       width: 100%;
       border: none;
       outline: none;
@@ -75,28 +63,27 @@
       font-weight: 700;
     }
 
-    .input,
-    .select {
+    .input, .select {
       background: #171938;
       color: #fff;
-      border: 1px solid rgba(130, 141, 255, .35);
+      border: 1px solid rgba(130,141,255,.35);
     }
 
     .label {
       font-size: 15px;
       font-weight: 800;
       color: #dfe3ff;
+      margin-bottom: 10px;
     }
 
     .mode-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
-    .mode-card,
-    .role-card {
+    .mode-card, .role-card {
       background: rgba(255,255,255,.04);
       border: 2px solid transparent;
       border-radius: 18px;
@@ -104,17 +91,14 @@
       cursor: pointer;
       transition: .2s ease;
       text-align: center;
-      min-height: 104px;
     }
 
-    .mode-card:hover,
-    .role-card:hover {
+    .mode-card:hover, .role-card:hover {
       transform: translateY(-2px);
-      border-color: rgba(117, 162, 255, 0.7);
+      border-color: rgba(117,162,255,.7);
     }
 
-    .mode-card.active,
-    .role-card.active {
+    .mode-card.active, .role-card.active {
       border-color: #5d93ff;
       box-shadow: 0 0 0 3px rgba(93,147,255,.16) inset;
     }
@@ -134,13 +118,13 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .avatar {
-      width: 70px;
-      height: 70px;
-      border-radius: 16px;
+      width: 82px;
+      height: 82px;
+      border-radius: 18px;
       margin: 0 auto 10px;
       display: block;
       object-fit: cover;
@@ -168,29 +152,17 @@
       font-size: 18px;
     }
 
-    .join-btn:hover {
-      filter: brightness(1.06);
-    }
+    .join-btn:hover { filter: brightness(1.06); }
 
     .game-layout {
       display: none;
-      grid-template-columns: 1.58fr 1fr;
+      grid-template-columns: 1.6fr 1fr;
       gap: 14px;
     }
 
-    .game-layout.show {
-      display: grid;
-    }
+    .game-layout.show { display: grid; }
 
-    .left-panel,
-    .right-panel {
-      min-height: 780px;
-    }
-
-    .left-panel-inner,
-    .right-panel-inner {
-      padding: 16px;
-    }
+    .left-panel-inner, .right-panel-inner { padding: 16px; }
 
     .sub-title {
       font-size: 20px;
@@ -212,7 +184,6 @@
       border: 1px solid rgba(132,144,255,.35);
       font-size: 14px;
       font-weight: 800;
-      color: #eff2ff;
     }
 
     .legend {
@@ -228,7 +199,6 @@
       padding: 12px 14px;
       font-size: 15px;
       font-weight: 800;
-      color: #dce3ff;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -242,26 +212,22 @@
 
     .map-and-skill {
       display: grid;
-      grid-template-columns: 1fr 240px;
+      grid-template-columns: 1fr 260px;
       gap: 14px;
-      align-items: start;
-      margin-top: 10px;
       margin-bottom: 14px;
     }
 
-    .map-wrap {
+    .map-wrap, .skill-box, .preview-box, .question-box, .panel-box {
       background: rgba(255,255,255,.02);
       border: 1px solid rgba(132,144,255,.25);
       border-radius: 20px;
       padding: 14px;
-      min-height: 430px;
     }
 
     .map-grid {
       display: grid;
       gap: 12px;
       justify-content: start;
-      align-content: start;
       min-height: 380px;
     }
 
@@ -283,13 +249,13 @@
     }
 
     .tile.disabled {
-      opacity: .55;
+      opacity: .5;
       cursor: not-allowed;
-      filter: grayscale(.15);
+      filter: grayscale(.2);
     }
 
     .tile.preview {
-      box-shadow: 0 0 0 3px rgba(255, 207, 87, .65) inset;
+      box-shadow: 0 0 0 3px rgba(255,207,87,.65) inset;
       border-color: #ffcf57;
     }
 
@@ -307,8 +273,6 @@
       left: 10px;
       font-size: 12px;
       font-weight: 900;
-      color: #d8defd;
-      opacity: .9;
     }
 
     .tile-type {
@@ -317,7 +281,6 @@
       left: 10px;
       font-size: 12px;
       font-weight: 900;
-      color: #ffffff;
       background: rgba(0,0,0,.18);
       padding: 4px 8px;
       border-radius: 999px;
@@ -325,22 +288,18 @@
 
     .player-marker {
       position: absolute;
-      top: 30px;
+      top: 28px;
       left: 50%;
       transform: translateX(-50%);
       width: 42px;
       height: 42px;
       border-radius: 14px;
       border: 3px solid rgba(255,255,255,.72);
-      box-shadow: 0 6px 18px rgba(0,0,0,.35);
       object-fit: cover;
       background: #fff;
     }
 
-    .two-markers {
-      position: absolute;
-      inset: 0;
-    }
+    .two-markers { position: absolute; inset: 0; }
 
     .marker-mini {
       position: absolute;
@@ -350,33 +309,12 @@
       border: 3px solid rgba(255,255,255,.75);
       object-fit: cover;
       background: #fff;
-      box-shadow: 0 4px 14px rgba(0,0,0,.28);
     }
 
-    .marker-mini.m1 {
-      top: 18px;
-      left: 14px;
-    }
+    .marker-mini.m1 { top: 16px; left: 14px; }
+    .marker-mini.m2 { top: 42px; right: 14px; }
 
-    .marker-mini.m2 {
-      top: 40px;
-      right: 14px;
-    }
-
-    .skill-box,
-    .preview-box,
-    .question-box,
-    .panel-box {
-      background: rgba(255,255,255,.02);
-      border: 1px solid rgba(132,144,255,.25);
-      border-radius: 20px;
-      padding: 14px;
-    }
-
-    .skill-box h3,
-    .preview-box h3,
-    .question-box h3,
-    .panel-box h3 {
+    .skill-box h3, .preview-box h3, .question-box h3, .panel-box h3 {
       margin: 0 0 12px;
       font-size: 18px;
       font-weight: 900;
@@ -389,17 +327,11 @@
       font-size: 16px;
     }
 
-    .skill-green {
-      background: #1bb56e;
-    }
-
-    .skill-red {
-      background: #e15050;
-    }
-
-    .skill-blue {
-      background: #4d84f7;
-    }
+    .skill-green { background: #1bb56e; }
+    .skill-red { background: #e15050; }
+    .skill-blue { background: #4d84f7; }
+    .skill-purple { background: #8b5cf6; }
+    .skill-orange { background: #f59e0b; }
 
     .skill-note {
       color: #d3dcff;
@@ -408,10 +340,7 @@
       font-weight: 700;
     }
 
-    .muted {
-      color: #cbd4ff;
-      opacity: .95;
-    }
+    .muted { color: #cbd4ff; }
 
     .preview-actions {
       display: grid;
@@ -452,9 +381,7 @@
       display: none;
     }
 
-    .question-card.show {
-      display: block;
-    }
+    .question-card.show { display: block; }
 
     .question-text {
       font-size: 18px;
@@ -478,10 +405,7 @@
       font-weight: 800;
     }
 
-    .option:hover {
-      border-color: #84a5ff;
-    }
-
+    .option:hover { border-color: #84a5ff; }
     .option.selected {
       border-color: #60a0ff;
       background: rgba(96,160,255,.16);
@@ -495,16 +419,12 @@
       display: none;
     }
 
-    .result-box.show {
-      display: block;
-    }
-
+    .result-box.show { display: block; }
     .result-correct {
       background: rgba(27,181,110,.16);
       color: #c9ffe6;
       border: 1px solid rgba(27,181,110,.38);
     }
-
     .result-wrong {
       background: rgba(225,80,80,.16);
       color: #ffd7d7;
@@ -528,7 +448,6 @@
       display: grid;
       grid-template-columns: 72px 1fr;
       gap: 12px;
-      align-items: start;
       margin-bottom: 10px;
     }
 
@@ -568,19 +487,16 @@
       min-height: 180px;
       font-size: 15px;
       line-height: 1.65;
-      color: #fff;
-      overflow-y: auto;
       white-space: pre-line;
+      overflow-y: auto;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .winner-modal {
       position: fixed;
       inset: 0;
-      background: rgba(3, 6, 18, 0.7);
+      background: rgba(3,6,18,.7);
       display: none;
       align-items: center;
       justify-content: center;
@@ -588,9 +504,7 @@
       z-index: 999;
     }
 
-    .winner-modal.show {
-      display: flex;
-    }
+    .winner-modal.show { display: flex; }
 
     .winner-card {
       width: min(480px, 100%);
@@ -599,7 +513,6 @@
       border-radius: 26px;
       padding: 24px;
       text-align: center;
-      box-shadow: 0 18px 40px rgba(0,0,0,.35);
     }
 
     .winner-card img {
@@ -609,7 +522,6 @@
       margin-bottom: 12px;
       object-fit: cover;
       border: 3px solid rgba(255,255,255,.7);
-      background: #fff;
     }
 
     .winner-big {
@@ -638,51 +550,17 @@
     }
 
     @media (max-width: 1200px) {
-      .role-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .mode-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .game-layout.show {
-        grid-template-columns: 1fr;
-      }
-
-      .map-and-skill {
-        grid-template-columns: 1fr;
-      }
-
-      .title {
-        font-size: 42px;
-      }
+      .role-grid { grid-template-columns: repeat(3, 1fr); }
+      .mode-grid { grid-template-columns: repeat(2, 1fr); }
+      .game-layout.show { grid-template-columns: 1fr; }
+      .map-and-skill { grid-template-columns: 1fr; }
+      .title { font-size: 42px; }
     }
 
     @media (max-width: 768px) {
-      .row,
-      .role-grid,
-      .mode-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .tile {
-        width: 82px;
-        height: 82px;
-      }
-
-      .player-top {
-        grid-template-columns: 60px 1fr;
-      }
-
-      .player-avatar {
-        width: 60px;
-        height: 60px;
-      }
-
-      .title {
-        font-size: 36px;
-      }
+      .row, .role-grid, .mode-grid { grid-template-columns: 1fr; }
+      .tile { width: 82px; height: 82px; }
+      .title { font-size: 36px; }
     }
   </style>
 </head>
@@ -694,42 +572,34 @@
       <div class="section-title">建立 / 加入房間</div>
 
       <div class="row">
-        <div class="field">
-          <input id="roomInput" class="input" placeholder="房間號" value="123" />
-        </div>
-        <div class="field">
-          <input id="nicknameInput" class="input" placeholder="你的暱稱" value="555" />
-        </div>
+        <input id="roomInput" class="input" placeholder="房間號" value="123" />
+        <input id="nicknameInput" class="input" placeholder="你的暱稱" value="555" />
       </div>
 
       <div class="row">
-        <div class="field">
-          <select id="mapSizeSelect" class="select">
-            <option value="3">3x3</option>
-            <option value="4">4x4</option>
-            <option value="5">5x5</option>
-          </select>
-        </div>
-        <div class="field">
-          <select id="playerCountSelect" class="select">
-            <option value="2">2人</option>
-            <option value="3">3人</option>
-            <option value="4">4人</option>
-          </select>
-        </div>
+        <select id="mapSizeSelect" class="select">
+          <option value="3">3x3</option>
+          <option value="4">4x4</option>
+          <option value="5">5x5</option>
+        </select>
+        <select id="playerCountSelect" class="select">
+          <option value="2">2人</option>
+          <option value="3">3人</option>
+          <option value="4">4人</option>
+        </select>
       </div>
 
-      <div class="label" style="margin-bottom:10px;">題庫模式</div>
-      <div class="mode-grid" id="modeGrid"></div>
+      <div class="label">題庫模式</div>
+      <div id="modeGrid" class="mode-grid"></div>
 
-      <div class="label" style="margin-bottom:10px;">選擇角色</div>
-      <div class="role-grid" id="roleGrid"></div>
+      <div class="label">選擇角色</div>
+      <div id="roleGrid" class="role-grid"></div>
 
       <button id="joinBtn" class="btn join-btn">加入房間</button>
     </div>
 
     <div id="gameScreen" class="game-layout">
-      <div class="card left-panel">
+      <div class="card">
         <div class="left-panel-inner">
           <div class="sub-title">遊戲地圖</div>
 
@@ -754,14 +624,10 @@
 
             <div class="skill-box">
               <h3>技能操作</h3>
-              <button id="skillDeleteBtn" class="btn skill-btn skill-green">✂️ 刪2選項</button>
-              <button id="skillResetBtn" class="btn skill-btn skill-red">🔄 重置灰格</button>
-              <button id="skillBombBtn" class="btn skill-btn skill-red">💣 炸彈</button>
-              <button id="skillFreezeBtn" class="btn skill-btn skill-blue">⏱️ 凍結 5 秒</button>
+              <div id="skillButtonsWrap"></div>
               <div class="skill-note" id="skillNote">
-                提示：重置灰格需要先點一個鄰近格。<br />
-                霸佔 / 炸彈可在預覽格時使用。<br /><br />
-                目前未選擇技能格
+                只有你選擇的角色技能會顯示。<br>
+                共通技能：重置灰格。
               </div>
             </div>
           </div>
@@ -769,7 +635,6 @@
           <div class="preview-box" style="margin-bottom:14px;">
             <h3>格子預覽</h3>
             <div id="previewContent" class="muted">題型：<br><br>請先點選地圖上的格子</div>
-
             <div class="preview-actions">
               <button id="confirmChallengeBtn" class="btn btn-confirm">📝 確認作答</button>
               <button id="cancelPreviewBtn" class="btn btn-cancel">取消</button>
@@ -790,10 +655,9 @@
         </div>
       </div>
 
-      <div class="card right-panel">
+      <div class="card">
         <div class="right-panel-inner">
           <div class="sub-title">玩家資訊</div>
-
           <div id="playerList" class="player-list"></div>
 
           <div class="panel-box">
@@ -816,65 +680,46 @@
   </div>
 
   <script>
-    const svgAvatar = (bg1, bg2, face, mark) => {
-      const svg = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="${bg1}"/>
-            <stop offset="100%" stop-color="${bg2}"/>
-          </linearGradient>
-        </defs>
-        <rect width="200" height="200" rx="36" fill="url(#g)"/>
-        <circle cx="100" cy="82" r="42" fill="#ffe8c7"/>
-        <circle cx="84" cy="76" r="5" fill="#2c2c2c"/>
-        <circle cx="116" cy="76" r="5" fill="#2c2c2c"/>
-        <path d="M82 98 Q100 112 118 98" stroke="#2c2c2c" stroke-width="6" fill="none" stroke-linecap="round"/>
-        <text x="100" y="152" text-anchor="middle" font-size="44" font-family="Arial" fill="${face}" font-weight="900">${mark}</text>
-      </svg>`;
-      return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-    };
-
     const ROLES = [
       {
         id: "scholar",
         name: "學霸",
-        skill: "刪 2 ×3",
+        skillText: "刪 2 ×3",
         shortRole: "學霸",
-        avatar: svgAvatar("#ffb84d", "#ff7a4f", "#ffffff", "📘"),
-        counts: { delete2: 3, reset: 1, occupy: 0, freeze: 0, bomb: 0 }
+        image: "static/characters/scholar.png",
+        counts: { delete2: 3, reset: 1, occupy: 0, freeze: 0, bomb: 0, reveal: 0 }
       },
       {
         id: "landlord",
         name: "霸道地主",
-        skill: "霸佔 ×1",
+        skillText: "霸佔 ×1",
         shortRole: "霸道地主",
-        avatar: svgAvatar("#ff6b5c", "#d93a67", "#ffffff", "🏰"),
-        counts: { delete2: 0, reset: 1, occupy: 1, freeze: 0, bomb: 0 }
+        image: "static/characters/landlord.png",
+        counts: { delete2: 0, reset: 1, occupy: 1, freeze: 0, bomb: 0, reveal: 0 }
       },
       {
         id: "prophet",
         name: "先知",
-        skill: "顯示題型",
+        skillText: "顯示題型",
         shortRole: "先知",
-        avatar: svgAvatar("#6f8cff", "#8e5cff", "#ffffff", "👁"),
-        counts: { delete2: 0, reset: 1, occupy: 0, freeze: 0, bomb: 0 }
+        image: "static/characters/prophet.png",
+        counts: { delete2: 0, reset: 1, occupy: 0, freeze: 0, bomb: 0, reveal: 1 }
       },
       {
         id: "timeMaster",
         name: "時間大師",
-        skill: "凍結 5 秒",
+        skillText: "凍結 5 秒",
         shortRole: "時間大師",
-        avatar: svgAvatar("#4fb7ff", "#2c68ff", "#ffffff", "⏰"),
-        counts: { delete2: 0, reset: 1, occupy: 0, freeze: 1, bomb: 0 }
+        image: "static/characters/time-master.png",
+        counts: { delete2: 0, reset: 1, occupy: 0, freeze: 1, bomb: 0, reveal: 0 }
       },
       {
         id: "bombMan",
         name: "炸彈怪客",
-        skill: "炸彈 ×1",
+        skillText: "炸彈 ×1",
         shortRole: "炸彈怪客",
-        avatar: svgAvatar("#a56cff", "#ff4f8b", "#ffffff", "💣"),
-        counts: { delete2: 0, reset: 1, occupy: 0, freeze: 0, bomb: 1 }
+        image: "static/characters/bomb-man.png",
+        counts: { delete2: 0, reset: 1, occupy: 0, freeze: 0, bomb: 1, reveal: 0 }
       }
     ];
 
@@ -887,63 +732,20 @@
 
     const QUESTIONS = {
       normal: [
-        {
-          type: "國文",
-          q: "「望梅止渴」這個成語，主要是在形容什麼？",
-          options: ["真正解渴", "以想像安慰自己", "梅子很好吃", "口渴不能忍"],
-          answer: 1,
-          explain: "望梅止渴是用想像來暫時安慰自己。"
-        },
-        {
-          type: "數學",
-          q: "15 + 27 = ?",
-          options: ["40", "41", "42", "43"],
-          answer: 2,
-          explain: "15 + 27 = 42。"
-        },
-        {
-          type: "地理",
-          q: "台灣的首都是哪裡？",
-          options: ["台中", "高雄", "台北", "台南"],
-          answer: 2,
-          explain: "台灣首都為台北。"
-        }
+        { type: "國文", q: "「望梅止渴」主要是在形容什麼？", options: ["真正解渴", "以想像安慰自己", "梅子很好吃", "口渴不能忍"], answer: 1, explain: "是用想像來暫時安慰自己。" },
+        { type: "數學", q: "15 + 27 = ?", options: ["40", "41", "42", "43"], answer: 2, explain: "15 + 27 = 42。" },
+        { type: "地理", q: "台灣的首都是哪裡？", options: ["台中", "高雄", "台北", "台南"], answer: 2, explain: "台灣首都為台北。" }
       ],
       hard: [
-        {
-          type: "歷史",
-          q: "鄭成功主要驅逐哪一個國家的勢力，收復台灣？",
-          options: ["英國", "西班牙", "葡萄牙", "荷蘭"],
-          answer: 3,
-          explain: "鄭成功驅逐荷蘭勢力。"
-        },
-        {
-          type: "科學",
-          q: "水的化學式為何？",
-          options: ["CO2", "H2O", "O2", "NaCl"],
-          answer: 1,
-          explain: "水的化學式是 H2O。"
-        }
+        { type: "歷史", q: "鄭成功主要驅逐哪一個國家的勢力，收復台灣？", options: ["英國", "西班牙", "葡萄牙", "荷蘭"], answer: 3, explain: "鄭成功驅逐荷蘭勢力。" },
+        { type: "科學", q: "水的化學式為何？", options: ["CO2", "H2O", "O2", "NaCl"], answer: 1, explain: "水的化學式是 H2O。" }
       ],
       super: [
-        {
-          type: "數學",
-          q: "若一個三角形三內角和為 180 度，兩角分別為 35 度與 65 度，第三角為？",
-          options: ["70 度", "75 度", "80 度", "90 度"],
-          answer: 2,
-          explain: "180 - 35 - 65 = 80。"
-        },
-        {
-          type: "邏輯",
-          q: "所有 A 都是 B，所有 B 都是 C，則下列何者正確？",
-          options: ["所有 C 都是 A", "所有 A 都是 C", "A 和 C 無關", "所有 B 都是 A"],
-          answer: 1,
-          explain: "由傳遞性可知所有 A 都是 C。"
-        }
+        { type: "數學", q: "三角形兩角為 35 度與 65 度，第三角為？", options: ["70 度", "75 度", "80 度", "90 度"], answer: 2, explain: "180 - 35 - 65 = 80。" },
+        { type: "邏輯", q: "所有 A 都是 B，所有 B 都是 C，則何者正確？", options: ["所有 C 都是 A", "所有 A 都是 C", "A 和 C 無關", "所有 B 都是 A"], answer: 1, explain: "由傳遞性可知所有 A 都是 C。" }
       ],
       mix: []
     };
-
     QUESTIONS.mix = [...QUESTIONS.normal, ...QUESTIONS.hard, ...QUESTIONS.super];
 
     const state = {
@@ -958,7 +760,6 @@
       selectedAnswer: null,
       timer: 15,
       timerInterval: null,
-      currentTurn: 0,
       gameStarted: false,
       players: [],
       board: []
@@ -979,6 +780,7 @@
     const resultBox = document.getElementById("resultBox");
     const submitAnswerBtn = document.getElementById("submitAnswerBtn");
     const timerText = document.getElementById("timerText");
+    const skillButtonsWrap = document.getElementById("skillButtonsWrap");
     const winnerModal = document.getElementById("winnerModal");
     const winnerAvatar = document.getElementById("winnerAvatar");
     const winnerText = document.getElementById("winnerText");
@@ -986,14 +788,19 @@
 
     function log(msg) {
       const time = new Date();
-      const pad = n => String(n).padStart(2, "0");
-      const hh = pad(time.getHours());
-      const mm = pad(time.getMinutes());
+      const hh = String(time.getHours()).padStart(2, "0");
+      const mm = String(time.getMinutes()).padStart(2, "0");
       const line = `- [${hh}:${mm}] ${msg}`;
-      systemLog.textContent = systemLog.textContent
-        ? `${systemLog.textContent}\n${line}`
-        : line;
+      systemLog.textContent = systemLog.textContent ? `${systemLog.textContent}\n${line}` : line;
       systemLog.scrollTop = systemLog.scrollHeight;
+    }
+
+    function getModeName(id) {
+      return MODES.find(m => m.id === id)?.name || "普通題型";
+    }
+
+    function getRoleById(id) {
+      return ROLES.find(r => r.id === id);
     }
 
     function renderModes() {
@@ -1019,9 +826,9 @@
         const div = document.createElement("div");
         div.className = "role-card" + (state.selectedRoleId === role.id ? " active" : "");
         div.innerHTML = `
-          <img class="avatar" src="${role.avatar}" alt="${role.name}">
+          <img class="avatar" src="${role.image}" alt="${role.name}" onerror="this.src='https://dummyimage.com/82x82/2d3566/ffffff&text=%E8%A7%92%E8%89%B2'">
           <div class="role-name">${role.name}</div>
-          <div class="role-skill">${role.skill}</div>
+          <div class="role-skill">${role.skillText}</div>
         `;
         div.onclick = () => {
           state.selectedRoleId = role.id;
@@ -1029,10 +836,6 @@
         };
         roleGrid.appendChild(div);
       });
-    }
-
-    function getModeName(id) {
-      return MODES.find(m => m.id === id)?.name || "普通題型";
     }
 
     function createBoard(size) {
@@ -1050,7 +853,7 @@
     }
 
     function initPlayers() {
-      const myRole = ROLES.find(r => r.id === state.selectedRoleId);
+      const myRole = getRoleById(state.selectedRoleId);
       const enemyRole = ROLES.find(r => r.id !== state.selectedRoleId) || ROLES[0];
 
       state.players = [
@@ -1058,7 +861,7 @@
           id: "p1",
           nickname: "321",
           roleName: enemyRole.shortRole,
-          avatar: enemyRole.avatar,
+          avatar: enemyRole.image,
           position: 0,
           score: 1,
           status: "進行中",
@@ -1068,7 +871,7 @@
           id: "p2",
           nickname: state.nickname || "555",
           roleName: myRole.shortRole,
-          avatar: myRole.avatar,
+          avatar: myRole.image,
           position: state.mapSize - 1,
           score: 1,
           status: "進行中",
@@ -1093,7 +896,7 @@
         card.className = "player-card";
         card.innerHTML = `
           <div class="player-top">
-            <img class="player-avatar" src="${player.avatar}" alt="${player.nickname}">
+            <img class="player-avatar" src="${player.avatar}" alt="${player.nickname}" onerror="this.src='https://dummyimage.com/72x72/2d3566/ffffff&text=%E7%8E%A9%E5%AE%B6'">
             <div>
               <div class="player-name">${player.nickname}${player.isMe ? "（你）" : ""}</div>
               <div class="player-role">${player.roleName}</div>
@@ -1104,7 +907,7 @@
             位置：(${Math.floor(player.position / state.mapSize)}, ${player.position % state.mapSize})<br>
             佔領格數：${player.score}<br>
             狀態：${player.status}<br>
-            刪2：${player.counts.delete2} ｜ 重置：${player.counts.reset} ｜ 霸佔：${player.counts.occupy} ｜ 凍結：${player.counts.freeze} ｜ 炸彈：${player.counts.bomb}
+            刪2：${player.counts.delete2} ｜ 重置：${player.counts.reset} ｜ 霸佔：${player.counts.occupy} ｜ 凍結：${player.counts.freeze} ｜ 炸彈：${player.counts.bomb} ｜ 顯示題型：${player.counts.reveal}
           </div>
         `;
         playerList.appendChild(card);
@@ -1124,15 +927,15 @@
         const playersHere = playerAtTile(tile.index);
         const isPreview = state.selectedTileIndex === tile.index;
         const me = state.players.find(p => p.isMe);
-        const isMyPos = me.position === tile.index;
+        const isMyPos = me && me.position === tile.index;
 
         let cls = "tile";
         if (tile.owner === "green") cls += " owner-green";
         if (tile.owner === "red") cls += " owner-red";
         if (tile.disabled) cls += " disabled";
         if (isPreview || isMyPos) cls += " preview";
-
         div.className = cls;
+
         div.innerHTML = `
           <div class="tile-header">#${tile.index + 1}</div>
           <div class="tile-type">${tile.type}</div>
@@ -1154,6 +957,47 @@
       });
     }
 
+    function renderSkillButtons() {
+      const me = state.players.find(p => p.isMe);
+      if (!me) return;
+
+      skillButtonsWrap.innerHTML = "";
+
+      const buttons = [];
+
+      if (me.counts.delete2 > 0) {
+        buttons.push({ text: `✂️ 刪2選項 (${me.counts.delete2})`, className: "skill-green", onClick: useDelete2 });
+      }
+
+      if (me.counts.occupy > 0) {
+        buttons.push({ text: `🏰 霸佔 (${me.counts.occupy})`, className: "skill-orange", onClick: useOccupy });
+      }
+
+      if (me.counts.reveal > 0) {
+        buttons.push({ text: `👁️ 顯示題型 (${me.counts.reveal})`, className: "skill-purple", onClick: useReveal });
+      }
+
+      if (me.counts.freeze > 0) {
+        buttons.push({ text: `⏱️ 凍結 5 秒 (${me.counts.freeze})`, className: "skill-blue", onClick: useFreeze });
+      }
+
+      if (me.counts.bomb > 0) {
+        buttons.push({ text: `💣 炸彈 (${me.counts.bomb})`, className: "skill-red", onClick: useBomb });
+      }
+
+      if (me.counts.reset > 0) {
+        buttons.push({ text: `🔄 重置灰格 (${me.counts.reset})`, className: "skill-red", onClick: useResetTile });
+      }
+
+      buttons.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = `btn skill-btn ${item.className}`;
+        btn.textContent = item.text;
+        btn.onclick = item.onClick;
+        skillButtonsWrap.appendChild(btn);
+      });
+    }
+
     function onTileClick(index) {
       const tile = state.board[index];
       if (tile.disabled) {
@@ -1172,7 +1016,6 @@
       resultBox.className = "result-box";
       resultBox.textContent = "";
       renderMap();
-
       log(`已預覽格子 #${index + 1}，題型：${tile.type}`);
     }
 
@@ -1215,6 +1058,7 @@
       clearInterval(state.timerInterval);
       state.timer = 15;
       timerText.textContent = `${state.timer} 秒`;
+
       state.timerInterval = setInterval(() => {
         state.timer--;
         timerText.textContent = `${state.timer} 秒`;
@@ -1227,7 +1071,6 @@
 
     function handleAnswer(timeout = false) {
       clearInterval(state.timerInterval);
-
       if (!state.currentQuestion) return;
 
       if (timeout) {
@@ -1246,70 +1089,39 @@
 
       const correct = state.selectedAnswer === state.currentQuestion.answer;
       const me = state.players.find(p => p.isMe);
-      const enemy = state.players.find(p => !p.isMe);
       const tile = state.board[state.selectedTileIndex];
 
       if (correct) {
         resultBox.className = "result-box result-correct show";
         resultBox.textContent = `答對了！${state.currentQuestion.explain}`;
         me.position = tile.index;
-        me.score += tile.owner === null ? 1 : 0;
+        if (tile.owner === null) me.score += 1;
         tile.owner = "red";
         log(`答對並成功占領格子 #${tile.index + 1}`);
       } else {
         resultBox.className = "result-box result-wrong show";
         resultBox.textContent = `答錯了。正確答案：${state.currentQuestion.options[state.currentQuestion.answer]}。${state.currentQuestion.explain}`;
-        log(`答錯，未占領格子 #${tile.index + 1}`);
         disableSelectedTile();
+        log(`答錯，未占領格子 #${tile.index + 1}`);
       }
 
       state.currentQuestion = null;
       renderPlayers();
       renderMap();
+      renderSkillButtons();
       checkWinner();
     }
 
     function disableSelectedTile() {
       if (state.selectedTileIndex === null) return;
-      const tile = state.board[state.selectedTileIndex];
-      tile.disabled = true;
-      renderMap();
-    }
-
-    function checkWinner() {
-      const fullOwned = state.board.filter(t => t.owner !== null || t.disabled).length >= state.board.length;
-      const me = state.players.find(p => p.isMe);
-      const enemy = state.players.find(p => !p.isMe);
-
-      if (fullOwned) {
-        const winner = me.score >= enemy.score ? me : enemy;
-        winnerAvatar.src = winner.avatar;
-        winnerText.textContent = `${winner.nickname} 取得勝利`;
-        winnerStat.textContent = `佔領格數：${winner.score}`;
-        winnerModal.classList.add("show");
-        log(`遊戲結束，${winner.nickname} 勝利。`);
-      }
-    }
-
-    function resetPreview() {
-      state.selectedTileIndex = null;
-      previewContent.innerHTML = `題型：<br><br>請先點選地圖上的格子`;
-      questionCard.classList.remove("show");
-      clearInterval(state.timerInterval);
-      timerText.textContent = "15 秒";
+      state.board[state.selectedTileIndex].disabled = true;
       renderMap();
     }
 
     function useDelete2() {
       const me = state.players.find(p => p.isMe);
-      if (me.counts.delete2 <= 0) {
-        alert("刪2次數不足");
-        return;
-      }
-      if (!state.currentQuestion) {
-        alert("請先開始作答");
-        return;
-      }
+      if (me.counts.delete2 <= 0) return alert("刪2次數不足");
+      if (!state.currentQuestion) return alert("請先開始作答");
 
       const wrongIndexes = state.currentQuestion.options
         .map((_, i) => i)
@@ -1326,54 +1138,105 @@
 
       me.counts.delete2--;
       renderPlayers();
+      renderSkillButtons();
       log("已使用技能：刪2選項");
     }
 
     function useResetTile() {
       const me = state.players.find(p => p.isMe);
-      if (me.counts.reset <= 0) {
-        alert("重置次數不足");
-        return;
-      }
+      if (me.counts.reset <= 0) return alert("重置次數不足");
+
       const target = state.board.find(t => t.disabled);
-      if (!target) {
-        alert("目前沒有灰色格可重置");
-        return;
-      }
+      if (!target) return alert("目前沒有灰色格可重置");
+
       target.disabled = false;
       me.counts.reset--;
       renderPlayers();
       renderMap();
+      renderSkillButtons();
       log(`已重置灰格：#${target.index + 1}`);
     }
 
     function useBomb() {
       const me = state.players.find(p => p.isMe);
-      if (me.counts.bomb <= 0) {
-        alert("炸彈次數不足");
-        return;
-      }
-      if (state.selectedTileIndex === null) {
-        alert("請先選一個格子");
-        return;
-      }
+      if (me.counts.bomb <= 0) return alert("炸彈次數不足");
+      if (state.selectedTileIndex === null) return alert("請先選一個格子");
+
       const tile = state.board[state.selectedTileIndex];
       tile.disabled = true;
       me.counts.bomb--;
       renderPlayers();
       renderMap();
+      renderSkillButtons();
       log(`已對格子 #${tile.index + 1} 使用炸彈`);
     }
 
     function useFreeze() {
       const me = state.players.find(p => p.isMe);
-      if (me.counts.freeze <= 0) {
-        alert("凍結次數不足");
-        return;
-      }
+      if (me.counts.freeze <= 0) return alert("凍結次數不足");
+
       me.counts.freeze--;
       renderPlayers();
+      renderSkillButtons();
       log("已使用技能：凍結對手 5 秒");
+    }
+
+    function useOccupy() {
+      const me = state.players.find(p => p.isMe);
+      if (me.counts.occupy <= 0) return alert("霸佔次數不足");
+      if (state.selectedTileIndex === null) return alert("請先選擇一個格子");
+
+      const tile = state.board[state.selectedTileIndex];
+      if (tile.owner !== "red") {
+        tile.owner = "red";
+        me.score += 1;
+      }
+      me.counts.occupy--;
+      renderPlayers();
+      renderMap();
+      renderSkillButtons();
+      log(`已使用技能：直接霸佔格子 #${tile.index + 1}`);
+    }
+
+    function useReveal() {
+      const me = state.players.find(p => p.isMe);
+      if (me.counts.reveal <= 0) return alert("顯示題型次數不足");
+      if (state.selectedTileIndex === null) return alert("請先點選格子");
+
+      const tile = state.board[state.selectedTileIndex];
+      previewContent.innerHTML = `
+        題型：${tile.type}<br><br>
+        格子編號：#${tile.index + 1}<br>
+        先知技能已發動，可直接查看此格題型。
+      `;
+      me.counts.reveal--;
+      renderPlayers();
+      renderSkillButtons();
+      log(`已使用技能：顯示格子 #${tile.index + 1} 題型`);
+    }
+
+    function resetPreview() {
+      state.selectedTileIndex = null;
+      previewContent.innerHTML = `題型：<br><br>請先點選地圖上的格子`;
+      questionCard.classList.remove("show");
+      clearInterval(state.timerInterval);
+      timerText.textContent = "15 秒";
+      renderMap();
+    }
+
+    function checkWinner() {
+      const doneCount = state.board.filter(t => t.owner !== null || t.disabled).length;
+      if (doneCount < state.board.length) return;
+
+      const me = state.players.find(p => p.isMe);
+      const enemy = state.players.find(p => !p.isMe);
+      const winner = me.score >= enemy.score ? me : enemy;
+
+      winnerAvatar.src = winner.avatar;
+      winnerText.textContent = `${winner.nickname} 取得勝利`;
+      winnerStat.textContent = `佔領格數：${winner.score}`;
+      winnerModal.classList.add("show");
+      log(`遊戲結束，${winner.nickname} 勝利。`);
     }
 
     joinBtn.addEventListener("click", () => {
@@ -1391,20 +1254,17 @@
       updateTopChips();
       renderPlayers();
       renderMap();
+      renderSkillButtons();
 
       systemLog.textContent = "";
       log(`遊戲開始，題庫模式：${getModeName(state.selectedMode)}`);
-      log(`${state.nickname} 加入大廳`);
+      log(`${state.nickname} 選擇角色：${getRoleById(state.selectedRoleId).name}`);
       log("成功加入房間");
     });
 
     document.getElementById("confirmChallengeBtn").addEventListener("click", startQuestion);
     document.getElementById("cancelPreviewBtn").addEventListener("click", resetPreview);
     submitAnswerBtn.addEventListener("click", () => handleAnswer(false));
-    document.getElementById("skillDeleteBtn").addEventListener("click", useDelete2);
-    document.getElementById("skillResetBtn").addEventListener("click", useResetTile);
-    document.getElementById("skillBombBtn").addEventListener("click", useBomb);
-    document.getElementById("skillFreezeBtn").addEventListener("click", useFreeze);
     document.getElementById("closeWinnerBtn").addEventListener("click", () => {
       winnerModal.classList.remove("show");
     });
