@@ -14,7 +14,8 @@
       color: #fff;
     }
     .app { max-width: 1460px; margin: 0 auto; padding: 18px 14px 28px; }
-    .title { font-size: 56px; font-weight: 900; margin: 0 0 18px; }
+    .title { font-size: 52px; font-weight: 900; margin: 0 0 18px; }
+
     .card {
       background: rgba(47, 48, 92, 0.92);
       border: 1px solid rgba(119, 132, 255, 0.35);
@@ -22,178 +23,451 @@
       box-shadow: 0 14px 30px rgba(0,0,0,.22);
       overflow: hidden;
     }
+
     .setup-wrap { padding: 22px; margin-bottom: 18px; }
     .section-title { font-size: 22px; font-weight: 900; margin-bottom: 16px; }
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
     .input, .select, .btn {
-      width: 100%; border: none; outline: none; border-radius: 14px; padding: 14px 16px;
-      font-size: 16px; font-weight: 700;
+      width: 100%;
+      border: none;
+      outline: none;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-weight: 700;
     }
+
     .input, .select {
-      background: #171938; color: #fff; border: 1px solid rgba(130,141,255,.35);
+      background: #171938;
+      color: #fff;
+      border: 1px solid rgba(130,141,255,.35);
     }
-    .label { font-size: 15px; font-weight: 800; color: #dfe3ff; margin-bottom: 10px; }
-    .mode-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px; }
-    .mode-card, .role-card {
-      background: rgba(255,255,255,.04); border: 2px solid transparent; border-radius: 18px;
-      padding: 18px 14px; cursor: pointer; transition: .2s ease; text-align: center;
+
+    .label {
+      font-size: 15px;
+      font-weight: 800;
+      color: #dfe3ff;
+      margin-bottom: 10px;
     }
-    .mode-card:hover, .role-card:hover { transform: translateY(-2px); border-color: rgba(117,162,255,.7); }
-    .mode-card.active, .role-card.active { border-color: #5d93ff; box-shadow: 0 0 0 3px rgba(93,147,255,.16) inset; }
-    .role-card.disabled { opacity: .42; cursor: not-allowed; }
-    .mode-emoji { font-size: 34px; margin-bottom: 10px; display: block; }
-    .mode-name { font-size: 16px; font-weight: 900; }
-    .role-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 18px; }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .role-card {
+      background: rgba(255,255,255,.04);
+      border: 2px solid transparent;
+      border-radius: 18px;
+      padding: 18px 14px;
+      cursor: pointer;
+      transition: .2s ease;
+      text-align: center;
+    }
+
+    .role-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(117,162,255,.7);
+    }
+
+    .role-card.active {
+      border-color: #5d93ff;
+      box-shadow: 0 0 0 3px rgba(93,147,255,.16) inset;
+    }
+
     .avatar {
-      width: 82px; height: 82px; border-radius: 18px; margin: 0 auto 10px; display: block;
-      object-fit: cover; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+      width: 82px;
+      height: 82px;
+      border-radius: 18px;
+      margin: 0 auto 10px;
+      display: block;
+      object-fit: cover;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
     }
+
     .role-name { font-size: 17px; font-weight: 900; margin-bottom: 6px; }
     .role-skill { font-size: 14px; color: #cdd4ff; font-weight: 700; line-height: 1.5; }
-    .join-btn { background: linear-gradient(90deg, #5a8dff, #4c86f6); color: #fff; cursor: pointer; font-size: 18px; }
 
-    .game-layout { display: none; grid-template-columns: 1.7fr 1fr; gap: 14px; }
+    .join-btn {
+      background: linear-gradient(90deg, #5a8dff, #4c86f6);
+      color: #fff;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .game-layout {
+      display: none;
+      grid-template-columns: 1.7fr 1fr;
+      gap: 14px;
+    }
+
     .game-layout.show { display: grid; }
-
     .left-panel-inner, .right-panel-inner { padding: 16px; }
+
     .sub-title { font-size: 20px; font-weight: 900; margin: 0 0 10px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
     .chip {
-      padding: 8px 12px; border-radius: 999px; background: #171938;
-      border: 1px solid rgba(132,144,255,.35); font-size: 14px; font-weight: 800;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #171938;
+      border: 1px solid rgba(132,144,255,.35);
+      font-size: 14px;
+      font-weight: 800;
     }
-    .legend { display: grid; gap: 8px; margin-bottom: 12px; }
+
+    .legend {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
     .legend-item {
-      background: #171938; border: 1px solid rgba(132,144,255,.28); border-radius: 14px;
-      padding: 12px 14px; font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 10px;
+      background: #171938;
+      border: 1px solid rgba(132,144,255,.28);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+
     .legend-color { width: 16px; height: 16px; border-radius: 4px; }
-    .map-and-side { display: grid; grid-template-columns: 1fr 280px; gap: 14px; margin-bottom: 14px; }
-    .map-wrap, .side-box, .panel-box {
-      background: rgba(255,255,255,.02); border: 1px solid rgba(132,144,255,.25); border-radius: 20px; padding: 14px;
+
+    .map-and-side {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 14px;
+      margin-bottom: 14px;
     }
-    .map-grid { display: grid; gap: 12px; justify-content: start; min-height: 380px; }
+
+    .map-wrap, .side-box, .panel-box, .lobby-box {
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(132,144,255,.25);
+      border-radius: 20px;
+      padding: 14px;
+    }
+
+    .map-grid {
+      display: grid;
+      gap: 12px;
+      justify-content: start;
+      min-height: 380px;
+    }
 
     .tile {
-      width: 92px; height: 92px; border-radius: 18px; border: 2px solid rgba(255,255,255,.08);
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
+      border: 2px solid rgba(255,255,255,.08);
       background: linear-gradient(180deg, #28305d 0%, #1e2445 100%);
-      position: relative; cursor: pointer; transition: .15s ease; overflow: hidden; opacity: 1;
+      position: relative;
+      cursor: pointer;
+      transition: .15s ease;
+      overflow: hidden;
+      opacity: 1;
     }
-    .tile.reachable { border-color: #1ddf7a; box-shadow: 0 0 0 3px rgba(29,223,122,.14) inset; }
-    .tile.current-pos { border-color: #ffcf57; box-shadow: 0 0 0 3px rgba(255,207,87,.28) inset; }
-    .tile.selected-preview { border-color: #7aa7ff; box-shadow: 0 0 0 3px rgba(122,167,255,.24) inset; }
-    .tile.blocked { background: linear-gradient(180deg, #595969 0%, #444454 100%); opacity: .72; cursor: not-allowed; }
+
+    .tile.reachable {
+      border-color: #1ddf7a;
+      box-shadow: 0 0 0 3px rgba(29,223,122,.14) inset;
+    }
+
+    .tile.current-pos {
+      border-color: #ffcf57;
+      box-shadow: 0 0 0 3px rgba(255,207,87,.28) inset;
+    }
+
+    .tile.selected-preview {
+      border-color: #7aa7ff;
+      box-shadow: 0 0 0 3px rgba(122,167,255,.24) inset;
+    }
+
+    .tile.blocked {
+      background: linear-gradient(180deg, #595969 0%, #444454 100%);
+      opacity: .72;
+      cursor: not-allowed;
+    }
+
     .tile.owner-p1 { background: linear-gradient(180deg, #205c47 0%, #173d31 100%); }
     .tile.owner-p2 { background: linear-gradient(180deg, #8b6117 0%, #654611 100%); }
     .tile.owner-p3 { background: linear-gradient(180deg, #4b4ed1 0%, #34379f 100%); }
     .tile.owner-p4 { background: linear-gradient(180deg, #a33ab0 0%, #772a82 100%); }
-    .tile.unavailable { opacity: .42; cursor: not-allowed; }
-    .tile-header { position: absolute; top: 7px; left: 9px; font-size: 12px; font-weight: 900; }
+
+    .tile.unavailable {
+      opacity: .42;
+      cursor: not-allowed;
+    }
+
+    .tile-header {
+      position: absolute;
+      top: 7px;
+      left: 9px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
     .tile-type {
-      position: absolute; bottom: 8px; left: 10px; font-size: 12px; font-weight: 900;
-      background: rgba(0,0,0,.22); padding: 4px 8px; border-radius: 999px; max-width: calc(100% - 20px);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      font-size: 12px;
+      font-weight: 900;
+      background: rgba(0,0,0,.22);
+      padding: 4px 8px;
+      border-radius: 999px;
+      max-width: calc(100% - 20px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .player-marker {
-      position: absolute; width: 32px; height: 32px; border-radius: 10px;
-      border: 3px solid rgba(255,255,255,.78); object-fit: cover; background: #fff;
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      border: 3px solid rgba(255,255,255,.78);
+      object-fit: cover;
+      background: #fff;
       box-shadow: 0 4px 12px rgba(0,0,0,.25);
     }
 
-    .side-box h3, .panel-box h3 { margin: 0 0 12px; font-size: 18px; font-weight: 900; }
-    .skill-btn { margin-bottom: 10px; color: #fff; cursor: pointer; font-size: 16px; }
+    .side-box h3, .panel-box h3, .lobby-box h3 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .skill-btn {
+      margin-bottom: 10px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
     .skill-green { background: #1bb56e; }
     .skill-red { background: #e15050; }
     .skill-blue { background: #4d84f7; }
     .skill-orange { background: #f59e0b; }
     .skill-purple { background: #8b5cf6; }
-    .skill-note { color: #d3dcff; font-size: 14px; line-height: 1.6; font-weight: 700; }
 
-    .player-list { display: grid; gap: 14px; margin-bottom: 14px; }
+    .skill-note {
+      color: #d3dcff;
+      font-size: 14px;
+      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    .player-list {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
     .player-card {
-      background: rgba(255,255,255,.03); border: 1px solid rgba(132,144,255,.25); border-radius: 20px; padding: 14px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(132,144,255,.25);
+      border-radius: 20px;
+      padding: 14px;
     }
-    .player-top { display: grid; grid-template-columns: 72px 1fr; gap: 12px; margin-bottom: 10px; }
+
+    .player-top {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
     .player-avatar {
-      width: 72px; height: 72px; border-radius: 18px; object-fit: cover;
-      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      object-fit: cover;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
     }
+
     .player-name { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
     .player-role { font-size: 15px; color: #d5dcff; font-weight: 800; }
     .player-info { font-size: 15px; line-height: 1.65; color: #eef2ff; font-weight: 700; }
 
     .system-log {
-      background: #090b17; border: 1px solid rgba(132,144,255,.25); border-radius: 18px;
-      padding: 14px; min-height: 180px; font-size: 15px; line-height: 1.65;
-      white-space: pre-line; overflow-y: auto;
+      background: #090b17;
+      border: 1px solid rgba(132,144,255,.25);
+      border-radius: 18px;
+      padding: 14px;
+      min-height: 180px;
+      font-size: 15px;
+      line-height: 1.65;
+      white-space: pre-line;
+      overflow-y: auto;
     }
 
     .mobile-modal {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, .45); display: none;
-      align-items: flex-end; justify-content: center; z-index: 1200;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .45);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 1200;
     }
-    .mobile-modal.show { display: flex; }
-    .mobile-sheet {
-      width: 100%; max-width: 560px; background: #2f305c;
-      border-top-left-radius: 24px; border-top-right-radius: 24px;
-      padding: 18px 16px 20px; box-shadow: 0 -12px 30px rgba(0,0,0,.28);
-    }
-    .mobile-sheet.large { max-height: 88vh; overflow-y: auto; }
-    .mobile-sheet-title { font-size: 20px; font-weight: 900; margin-bottom: 12px; }
-    .mobile-sheet-content { font-size: 16px; line-height: 1.7; color: #e8ecff; margin-bottom: 14px; }
-    .mobile-sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
 
-    .btn-confirm { background: #4e84f3; color: #fff; cursor: pointer; }
-    .btn-cancel { background: #8a8db0; color: #fff; cursor: pointer; }
+    .mobile-modal.show { display: flex; }
+
+    .mobile-sheet {
+      width: 100%;
+      max-width: 560px;
+      background: #2f305c;
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      padding: 18px 16px 20px;
+      box-shadow: 0 -12px 30px rgba(0,0,0,.28);
+    }
+
+    .mobile-sheet.large {
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .mobile-sheet-title {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .mobile-sheet-content {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #e8ecff;
+      margin-bottom: 14px;
+    }
+
+    .mobile-sheet-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
 
     .question-type-tag {
-      display: inline-flex; align-items: center; gap: 8px; background: rgba(225,94,94,.14);
-      color: #ffd4d4; border: 1px solid rgba(255,126,126,.28); padding: 8px 14px;
-      border-radius: 999px; font-weight: 900; margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(225,94,94,.14);
+      color: #ffd4d4;
+      border: 1px solid rgba(255,126,126,.28);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      margin-bottom: 12px;
     }
-    .options { display: grid; gap: 10px; }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
     .option {
-      padding: 12px 14px; border-radius: 14px; background: rgba(255,255,255,.04);
-      border: 1px solid rgba(132,144,255,.22); cursor: pointer; font-size: 15px; font-weight: 800;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(132,144,255,.22);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 800;
       transition: .15s ease;
     }
-    .option:hover { border-color: #84a5ff; transform: translateY(-1px); }
+
+    .option:hover {
+      border-color: #84a5ff;
+      transform: translateY(-1px);
+    }
+
+    .option.removed {
+      opacity: .35;
+      pointer-events: none;
+    }
 
     .result-box {
-      margin-top: 12px; border-radius: 14px; padding: 12px 14px; font-weight: 900;
-      display: none; line-height: 1.6;
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 900;
+      display: none;
+      line-height: 1.6;
     }
+
     .result-box.show { display: block; }
     .result-correct { background: rgba(27,181,110,.16); color: #c9ffe6; border: 1px solid rgba(27,181,110,.38); }
     .result-wrong { background: rgba(225,80,80,.16); color: #ffd7d7; border: 1px solid rgba(225,80,80,.35); }
 
     .winner-modal {
-      position: fixed; inset: 0; background: rgba(3,6,18,.7); display: none;
-      align-items: center; justify-content: center; padding: 20px; z-index: 999;
+      position: fixed;
+      inset: 0;
+      background: rgba(3,6,18,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
     }
+
     .winner-modal.show { display: flex; }
+
     .winner-card {
-      width: min(520px, 100%); background: linear-gradient(180deg, #2f305c 0%, #232647 100%);
-      border: 1px solid rgba(132,144,255,.36); border-radius: 26px; padding: 24px; text-align: center;
+      width: min(520px, 100%);
+      background: linear-gradient(180deg, #2f305c 0%, #232647 100%);
+      border: 1px solid rgba(132,144,255,.36);
+      border-radius: 26px;
+      padding: 24px;
+      text-align: center;
     }
+
     .winner-card img {
-      width: 110px; height: 110px; border-radius: 24px; margin-bottom: 12px;
-      object-fit: cover; border: 3px solid rgba(255,255,255,.7); background: #fff;
+      width: 110px;
+      height: 110px;
+      border-radius: 24px;
+      margin-bottom: 12px;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,.7);
+      background: #fff;
     }
+
     .winner-big { font-size: 32px; font-weight: 900; margin-bottom: 8px; }
     .winner-text { font-size: 19px; font-weight: 800; margin-bottom: 16px; color: #dfe5ff; }
     .winner-stat { font-size: 18px; font-weight: 900; margin-bottom: 18px; line-height: 1.8; }
+
+    .hidden { display: none !important; }
 
     @media (max-width: 1240px) {
       .game-layout.show { grid-template-columns: 1fr; }
       .map-and-side { grid-template-columns: 1fr; }
       .role-grid { grid-template-columns: repeat(3, 1fr); }
-      .mode-grid { grid-template-columns: repeat(2, 1fr); }
       .title { font-size: 42px; }
     }
+
     @media (max-width: 768px) {
-      .row, .role-grid, .mode-grid { grid-template-columns: 1fr; }
+      .row, .role-grid { grid-template-columns: 1fr; }
       .tile { width: 78px; height: 78px; }
       .title { font-size: 34px; }
     }
@@ -201,20 +475,23 @@
 </head>
 <body>
   <div class="app">
-    <div class="title">知識爭奪戰</div>
+    <div class="title">知識爭奪戰 - 多人連線版</div>
 
     <div id="setupScreen" class="card setup-wrap">
       <div class="section-title">建立 / 加入房間</div>
+
       <div class="row">
         <input id="roomInput" class="input" placeholder="房間號" value="123" />
         <input id="nicknameInput" class="input" placeholder="你的暱稱" value="555" />
       </div>
+
       <div class="row">
         <select id="mapSizeSelect" class="select">
           <option value="3">3x3</option>
           <option value="4">4x4</option>
           <option value="5">5x5</option>
         </select>
+
         <select id="playerCountSelect" class="select">
           <option value="2">2人</option>
           <option value="3">3人</option>
@@ -223,12 +500,29 @@
       </div>
 
       <div class="label">題庫模式</div>
-      <div id="modeGrid" class="mode-grid"></div>
+      <select id="modeSelect" class="select" style="margin-bottom:16px;">
+        <option value="normal">普通題型</option>
+        <option value="hard">困難題型</option>
+        <option value="super">超級難題型</option>
+        <option value="mix" selected>綜合題型</option>
+      </select>
 
       <div class="label">選擇角色</div>
       <div id="roleGrid" class="role-grid"></div>
 
       <button id="joinBtn" class="btn join-btn">加入房間</button>
+    </div>
+
+    <div id="lobbyScreen" class="card setup-wrap hidden">
+      <div class="section-title">房間大廳</div>
+      <div class="lobby-box">
+        <h3>房間資訊</h3>
+        <div id="lobbyInfo" class="skill-note"></div>
+        <div id="countdownBox" class="skill-note" style="margin-top:12px;"></div>
+        <div style="margin-top:14px;">
+          <button id="readyBtn" class="btn btn-confirm">準備完成</button>
+        </div>
+      </div>
     </div>
 
     <div id="gameScreen" class="game-layout">
@@ -258,10 +552,18 @@
             <div class="map-wrap">
               <div id="mapGrid" class="map-grid"></div>
             </div>
+
             <div class="side-box">
               <h3>技能 / 提示</h3>
               <div id="skillButtonsWrap"></div>
-              <div class="skill-note" id="previewContent">等待遊戲開始。</div>
+
+              <div style="margin-top:10px;">
+                <select id="targetPlayerSelect" class="select" style="margin-bottom:10px;">
+                  <option value="">選擇技能目標玩家</option>
+                </select>
+              </div>
+
+              <div id="previewContent" class="skill-note">等待遊戲開始。</div>
             </div>
           </div>
         </div>
@@ -271,6 +573,7 @@
         <div class="right-panel-inner">
           <div class="sub-title">玩家資訊</div>
           <div id="playerList" class="player-list"></div>
+
           <div class="panel-box">
             <h3>系統訊息</h3>
             <div id="systemLog" class="system-log"></div>
@@ -332,25 +635,17 @@
       { id: "bombMan", name: "炸彈怪客", skillText: "炸彈 ×1", imageCandidates: ["static/characters/bomb-man.png", "static/characters/bomb-man.PNG"] }
     ];
 
-    const MODES = [
-      { id: "normal", name: "普通題型", emoji: "🙂" },
-      { id: "hard", name: "困難題型", emoji: "🥱" },
-      { id: "super", name: "超級難題型", emoji: "🔥" },
-      { id: "mix", name: "綜合題型", emoji: "🎲" }
-    ];
-
     const state = {
-      selectedMode: "mix",
       selectedRoleId: "timeMaster",
       room: null,
       selectedTileIndex: null,
       timerInterval: null,
-      expireAt: 0
+      countdownInterval: null
     };
 
-    const modeGrid = document.getElementById("modeGrid");
     const roleGrid = document.getElementById("roleGrid");
     const setupScreen = document.getElementById("setupScreen");
+    const lobbyScreen = document.getElementById("lobbyScreen");
     const gameScreen = document.getElementById("gameScreen");
     const mapGrid = document.getElementById("mapGrid");
     const playerList = document.getElementById("playerList");
@@ -368,6 +663,10 @@
     const winnerAvatar = document.getElementById("winnerAvatar");
     const winnerText = document.getElementById("winnerText");
     const winnerStat = document.getElementById("winnerStat");
+    const readyBtn = document.getElementById("readyBtn");
+    const lobbyInfo = document.getElementById("lobbyInfo");
+    const countdownBox = document.getElementById("countdownBox");
+    const targetPlayerSelect = document.getElementById("targetPlayerSelect");
 
     function getRoleImage(role) {
       return role.imageCandidates[0];
@@ -420,20 +719,6 @@
       });
     }
 
-    function renderModes() {
-      modeGrid.innerHTML = "";
-      MODES.forEach((mode) => {
-        const div = document.createElement("div");
-        div.className = "mode-card" + (state.selectedMode === mode.id ? " active" : "");
-        div.innerHTML = `<span class="mode-emoji">${mode.emoji}</span><div class="mode-name">${mode.name}</div>`;
-        div.onclick = () => {
-          state.selectedMode = mode.id;
-          renderModes();
-        };
-        modeGrid.appendChild(div);
-      });
-    }
-
     function renderRoles() {
       roleGrid.innerHTML = "";
       ROLES.forEach((role) => {
@@ -453,18 +738,46 @@
       });
     }
 
+    function renderLobby() {
+      if (!state.room) return;
+      const me = myPlayer();
+      const owner = state.room.players.find((p) => p.id === state.room.ownerId);
+      lobbyInfo.innerHTML = `
+        房號：${state.room.roomNo}<br>
+        房主：${owner ? owner.nickname : "-"}<br>
+        目前人數：${state.room.players.length} / ${state.room.playerLimit}<br>
+        你的狀態：${me?.ready ? "已準備" : "未準備"}
+      `;
+
+      readyBtn.textContent = me?.ready ? "取消準備" : "準備完成";
+
+      clearInterval(state.countdownInterval);
+      countdownBox.textContent = "";
+
+      if (state.room.countdownEndsAt) {
+        const updateCountdown = () => {
+          const sec = Math.max(0, Math.ceil((state.room.countdownEndsAt - Date.now()) / 1000));
+          countdownBox.textContent = `全部玩家已準備，${sec} 秒後開始`;
+        };
+        updateCountdown();
+        state.countdownInterval = setInterval(updateCountdown, 250);
+      }
+    }
+
     function renderPlayers() {
       playerList.innerHTML = "";
       (state.room?.players || []).forEach((player, idx) => {
         const role = ROLES.find((r) => r.id === player.roleId) || ROLES[0];
         const fallbackJson = JSON.stringify(role.imageCandidates).replace(/"/g, "&quot;");
+        const extra = player.isSelf ? "（你）" : "";
+        const ownerMark = state.room.ownerId === player.id ? " 👑房主" : "";
         const card = document.createElement("div");
         card.className = "player-card";
         card.innerHTML = `
           <div class="player-top">
             <img class="player-avatar" src="${getRoleImage(role)}" alt="${player.nickname}" data-fallbacks="${fallbackJson}" data-index="0" onerror="handleImgFallback(this)">
             <div>
-              <div class="player-name">${player.nickname}${player.isSelf ? "（你）" : ""}</div>
+              <div class="player-name">${player.nickname}${extra}${ownerMark}</div>
               <div class="player-role">${player.roleName}</div>
             </div>
           </div>
@@ -472,7 +785,8 @@
             系統編號：玩家${idx + 1}<br>
             位置：(${Math.floor(player.position / state.room.mapSize)}, ${player.position % state.room.mapSize})<br>
             佔領格數：${player.score}<br>
-            狀態：${player.status}
+            狀態：${player.status}<br>
+            準備：${player.ready ? "是" : "否"}
           </div>
         `;
         playerList.appendChild(card);
@@ -483,8 +797,21 @@
       return (state.room?.players || []).filter((p) => p.position === index);
     }
 
+    function renderTargetPlayers() {
+      targetPlayerSelect.innerHTML = `<option value="">選擇技能目標玩家</option>`;
+      const me = myPlayer();
+      (state.room?.players || [])
+        .filter((p) => p.id !== me?.id && !p.ended)
+        .forEach((p) => {
+          const option = document.createElement("option");
+          option.value = p.id;
+          option.textContent = p.nickname;
+          targetPlayerSelect.appendChild(option);
+        });
+    }
+
     function renderMap() {
-      if (!state.room) return;
+      if (!state.room?.started) return;
       mapGrid.innerHTML = "";
       mapGrid.style.gridTemplateColumns = `repeat(${state.room.mapSize}, 92px)`;
 
@@ -509,6 +836,7 @@
         if (!available && tile.status !== "blocked") cls += " unavailable";
 
         div.className = cls;
+
         div.innerHTML = `
           <div class="tile-header">#${tile.index + 1}</div>
           <div class="tile-type">${tile.visibleType}</div>
@@ -544,13 +872,14 @@
     function renderSkillArea() {
       skillButtonsWrap.innerHTML = "";
       const me = myPlayer();
+
       if (!me) {
         previewContent.textContent = "等待加入房間。";
         return;
       }
 
       if (!state.room?.started) {
-        previewContent.textContent = "等待其他玩家加入。";
+        previewContent.textContent = "等待遊戲開始。";
         return;
       }
 
@@ -572,35 +901,52 @@
         const btn = document.createElement("button");
         btn.className = "btn skill-btn skill-green";
         btn.textContent = `✂️ 刪2選項 (${me.counts.delete2})`;
-        btn.onclick = () => alert("目前先完成多人同步本體，技能同步可再接下一版");
+        btn.onclick = () => socket.emit("use_skill", { skill: "delete2" });
         skillButtonsWrap.appendChild(btn);
       }
+
       if (me.counts?.occupy > 0) {
         const btn = document.createElement("button");
         btn.className = "btn skill-btn skill-orange";
         btn.textContent = `🏰 霸佔 (${me.counts.occupy})`;
-        btn.onclick = () => alert("目前先完成多人同步本體，技能同步可再接下一版");
+        btn.onclick = () => {
+          if (state.selectedTileIndex == null) return alert("請先選格子");
+          socket.emit("use_skill", { skill: "occupy", targetTileIndex: state.selectedTileIndex });
+        };
         skillButtonsWrap.appendChild(btn);
       }
+
       if (me.counts?.freeze > 0) {
         const btn = document.createElement("button");
         btn.className = "btn skill-btn skill-blue";
         btn.textContent = `⏱️ 凍結 (${me.counts.freeze})`;
-        btn.onclick = () => alert("目前先完成多人同步本體，技能同步可再接下一版");
+        btn.onclick = () => {
+          const target = targetPlayerSelect.value;
+          if (!target) return alert("請先選擇目標玩家");
+          socket.emit("use_skill", { skill: "freeze", targetPlayerId: target });
+        };
         skillButtonsWrap.appendChild(btn);
       }
+
       if (me.counts?.bomb > 0) {
         const btn = document.createElement("button");
         btn.className = "btn skill-btn skill-red";
         btn.textContent = `💣 炸彈 (${me.counts.bomb})`;
-        btn.onclick = () => alert("目前先完成多人同步本體，技能同步可再接下一版");
+        btn.onclick = () => {
+          if (state.selectedTileIndex == null) return alert("請先選格子");
+          socket.emit("use_skill", { skill: "bomb", targetTileIndex: state.selectedTileIndex });
+        };
         skillButtonsWrap.appendChild(btn);
       }
+
       if (me.counts?.reset > 0) {
         const btn = document.createElement("button");
         btn.className = "btn skill-btn skill-red";
         btn.textContent = `🔄 重置灰格 (${me.counts.reset})`;
-        btn.onclick = () => alert("目前先完成多人同步本體，技能同步可再接下一版");
+        btn.onclick = () => {
+          if (state.selectedTileIndex == null) return alert("請先選灰格");
+          socket.emit("use_skill", { skill: "reset", targetTileIndex: state.selectedTileIndex });
+        };
         skillButtonsWrap.appendChild(btn);
       }
     }
@@ -608,15 +954,27 @@
     function renderRoom() {
       if (!state.room) return;
 
+      const modeMap = {
+        normal: "普通題型",
+        hard: "困難題型",
+        super: "超級難題型",
+        mix: "綜合題型"
+      };
+
       document.getElementById("chipRoom").textContent = `房間：${state.room.roomNo}`;
       document.getElementById("chipMap").textContent = `地圖：${state.room.mapSize}x${state.room.mapSize}`;
-      document.getElementById("chipPlayers").textContent = `人數：${state.room.playerLimit}`;
-      document.getElementById("chipMode").textContent = `題庫：${MODES.find((m) => m.id === state.room.mode)?.name || "綜合題型"}`;
-      document.getElementById("chipStatus").textContent = `狀態：${state.room.finished ? "已結算" : state.room.started ? "進行中" : "等待中"}`;
+      document.getElementById("chipPlayers").textContent = `人數：${state.room.players.length}/${state.room.playerLimit}`;
+      document.getElementById("chipMode").textContent = `題庫：${modeMap[state.room.mode] || "綜合題型"}`;
+      document.getElementById("chipStatus").textContent = `狀態：${state.room.finished ? "已結算" : state.room.started ? "進行中" : "等待開始"}`;
 
+      renderLobby();
       renderPlayers();
-      renderMap();
-      renderSkillArea();
+      renderTargetPlayers();
+
+      if (state.room.started) {
+        renderMap();
+        renderSkillArea();
+      }
 
       systemLog.textContent = (state.room.logs || []).map((line) => `- ${line}`).join("\n");
       systemLog.scrollTop = systemLog.scrollHeight;
@@ -626,16 +984,26 @@
       const me = myPlayer();
       if (!state.room?.started || state.room?.finished) return;
       if (!me || me.ended) return alert("你已經結束");
-      if (!movableIndexesForSelf().includes(index)) return alert("只能點上下左右鄰近且可走的格子");
 
+      const movable = movableIndexesForSelf();
       const tile = state.room.board[index];
+
+      const canSelect =
+        movable.includes(index) ||
+        tile.status === "blocked";
+
+      if (!canSelect) {
+        alert("只能選鄰近可走格，或選灰格來重置");
+        return;
+      }
+
       state.selectedTileIndex = index;
 
       tileModalContent.innerHTML = `
         格子編號：#${tile.index + 1}<br>
         題型提示：${tile.visibleType}<br>
         目前占領：${tile.owner || "無"}<br>
-        狀態：可挑戰
+        狀態：${tile.status === "blocked" ? "灰色封鎖" : "可挑戰"}
       `;
 
       tileModal.classList.add("show");
@@ -662,8 +1030,12 @@
         roleId: state.selectedRoleId,
         mapSize: Number(document.getElementById("mapSizeSelect").value),
         playerLimit: Number(document.getElementById("playerCountSelect").value),
-        mode: state.selectedMode
+        mode: document.getElementById("modeSelect").value
       });
+    });
+
+    readyBtn.addEventListener("click", () => {
+      socket.emit("toggle_ready");
     });
 
     document.getElementById("tileModalCancelBtn").addEventListener("click", () => {
@@ -691,8 +1063,11 @@
 
     socket.on("room_state", (room) => {
       state.room = room;
-      setupScreen.style.display = room.started ? "none" : "block";
-      gameScreen.classList.toggle("show", room.started);
+
+      setupScreen.classList.toggle("hidden", !!room);
+      lobbyScreen.classList.toggle("hidden", !room || room.started);
+      gameScreen.classList.toggle("show", !!room && room.started);
+
       renderRoom();
 
       if (room.finished) {
@@ -715,7 +1090,7 @@
       }
     });
 
-    socket.on("question_started", ({ question, expireAt }) => {
+    socket.on("question_started", ({ question, expireAt, removedOptions }) => {
       modalQuestionText.textContent = question.q;
       modalOptionsWrap.innerHTML = "";
       modalResultBox.className = "result-box";
@@ -725,14 +1100,29 @@
       question.options.forEach((opt, idx) => {
         const option = document.createElement("div");
         option.className = "option";
-        option.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
-        option.onclick = () => {
-          socket.emit("answer_question", { optionIndex: idx });
-        };
+        if ((removedOptions || []).includes(idx)) {
+          option.classList.add("removed");
+          option.textContent = `${String.fromCharCode(65 + idx)}. （已刪除）`;
+        } else {
+          option.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+          option.onclick = () => {
+            socket.emit("answer_question", { optionIndex: idx });
+          };
+        }
         modalOptionsWrap.appendChild(option);
       });
 
       questionModal.classList.add("show");
+    });
+
+    socket.on("question_options_removed", ({ removedOptions }) => {
+      [...modalOptionsWrap.children].forEach((el, idx) => {
+        if (removedOptions.includes(idx)) {
+          el.classList.add("removed");
+          el.textContent = `${String.fromCharCode(65 + idx)}. （已刪除）`;
+          el.onclick = null;
+        }
+      });
     });
 
     socket.on("question_result", (result) => {
@@ -751,7 +1141,6 @@
       }, 900);
     });
 
-    renderModes();
     renderRoles();
   </script>
 </body>
