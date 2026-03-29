@@ -147,7 +147,7 @@
     .legend {
       display: grid;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-top: 14px;
     }
 
     .legend-item {
@@ -168,10 +168,10 @@
       display: grid;
       grid-template-columns: 1fr 300px;
       gap: 14px;
-      margin-bottom: 14px;
+      margin-bottom: 6px;
     }
 
-    .map-wrap, .side-box, .panel-box, .lobby-box {
+    .map-wrap, .side-box, .panel-box, .lobby-box, .rooms-box {
       background: rgba(255,255,255,.02);
       border: 1px solid rgba(132,144,255,.25);
       border-radius: 20px;
@@ -263,7 +263,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,.25);
     }
 
-    .side-box h3, .panel-box h3, .lobby-box h3 {
+    .side-box h3, .panel-box h3, .lobby-box h3, .rooms-box h3 {
       margin: 0 0 12px;
       font-size: 18px;
       font-weight: 900;
@@ -332,6 +332,39 @@
       line-height: 1.65;
       white-space: pre-line;
       overflow-y: auto;
+    }
+
+    .rooms-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .room-item {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(132,144,255,.24);
+      border-radius: 16px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .room-item:hover {
+      border-color: #7ea4ff;
+      transform: translateY(-1px);
+    }
+
+    .room-item-title {
+      font-size: 16px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .room-item-meta {
+      font-size: 14px;
+      color: #d8dfff;
+      font-weight: 700;
+      line-height: 1.6;
     }
 
     .mobile-modal {
@@ -493,8 +526,8 @@
       <div class="section-title">建立 / 加入房間</div>
 
       <div class="row">
-        <input id="roomInput" class="input" placeholder="房間號" value="123" />
-        <input id="nicknameInput" class="input" placeholder="你的暱稱" value="555" />
+        <input id="roomInput" class="input" placeholder="房間號" />
+        <input id="nicknameInput" class="input" placeholder="你的暱稱" />
       </div>
 
       <div class="row">
@@ -523,6 +556,12 @@
       <div id="roleGrid" class="role-grid"></div>
 
       <button id="joinBtn" class="btn join-btn">加入房間</button>
+
+      <div class="rooms-box" style="margin-top:18px;">
+        <h3>目前可加入房間</h3>
+        <div id="publicRoomsEmpty" class="skill-note">目前沒有可加入房間。</div>
+        <div id="publicRoomsList" class="rooms-list"></div>
+      </div>
     </div>
 
     <div id="lobbyScreen" class="card setup-wrap hidden">
@@ -550,16 +589,6 @@
             <div class="chip" id="chipStatus">狀態：等待中</div>
           </div>
 
-          <div class="legend">
-            <div class="legend-item"><span class="legend-color" style="background:#1ddf7a;"></span> 綠框 - 你目前可前進</div>
-            <div class="legend-item"><span class="legend-color" style="background:#ffcf57;"></span> 黃框 - 你的位置</div>
-            <div class="legend-item"><span class="legend-color" style="background:#205c47;"></span> 綠底 - 玩家1占領</div>
-            <div class="legend-item"><span class="legend-color" style="background:#8b6117;"></span> 金底 - 玩家2占領</div>
-            <div class="legend-item"><span class="legend-color" style="background:#4b4ed1;"></span> 藍底 - 玩家3占領</div>
-            <div class="legend-item"><span class="legend-color" style="background:#a33ab0;"></span> 紫底 - 玩家4占領</div>
-            <div class="legend-item"><span class="legend-color" style="background:#595969;"></span> 灰底 - 答錯封鎖</div>
-          </div>
-
           <div class="map-and-side">
             <div class="map-wrap">
               <div id="mapGrid" class="map-grid"></div>
@@ -570,6 +599,16 @@
               <div id="skillButtonsWrap"></div>
               <div id="previewContent" class="skill-note">等待遊戲開始。</div>
             </div>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item"><span class="legend-color" style="background:#1ddf7a;"></span> 綠框 - 你目前可前進</div>
+            <div class="legend-item"><span class="legend-color" style="background:#ffcf57;"></span> 黃框 - 你的位置</div>
+            <div class="legend-item"><span class="legend-color" style="background:#205c47;"></span> 綠底 - 玩家1占領</div>
+            <div class="legend-item"><span class="legend-color" style="background:#8b6117;"></span> 金底 - 玩家2占領</div>
+            <div class="legend-item"><span class="legend-color" style="background:#4b4ed1;"></span> 藍底 - 玩家3占領</div>
+            <div class="legend-item"><span class="legend-color" style="background:#a33ab0;"></span> 紫底 - 玩家4占領</div>
+            <div class="legend-item"><span class="legend-color" style="background:#595969;"></span> 灰底 - 答錯封鎖</div>
           </div>
         </div>
       </div>
@@ -656,7 +695,8 @@
       countdownInterval: null,
       freezeInterval: null,
       expireAt: 0,
-      activeSkillMode: null
+      activeSkillMode: null,
+      publicRooms: []
     };
 
     const roleGrid = document.getElementById("roleGrid");
@@ -685,6 +725,13 @@
     const questionSkillBar = document.getElementById("questionSkillBar");
     const freezeModal = document.getElementById("freezeModal");
     const freezeCountdownText = document.getElementById("freezeCountdownText");
+    const publicRoomsList = document.getElementById("publicRoomsList");
+    const publicRoomsEmpty = document.getElementById("publicRoomsEmpty");
+    const roomInput = document.getElementById("roomInput");
+    const nicknameInput = document.getElementById("nicknameInput");
+    const mapSizeSelect = document.getElementById("mapSizeSelect");
+    const playerCountSelect = document.getElementById("playerCountSelect");
+    const modeSelect = document.getElementById("modeSelect");
 
     function getRoleImage(role) {
       return role.imageCandidates[0];
@@ -761,6 +808,46 @@
           renderRoles();
         };
         roleGrid.appendChild(div);
+      });
+    }
+
+    function renderPublicRooms() {
+      publicRoomsList.innerHTML = "";
+      const rooms = state.publicRooms || [];
+
+      publicRoomsEmpty.style.display = rooms.length ? "none" : "block";
+
+      rooms.forEach((room) => {
+        const item = document.createElement("div");
+        item.className = "room-item";
+        item.innerHTML = `
+          <div class="room-item-title">房號：${room.roomNo}</div>
+          <div class="room-item-meta">
+            房主：${room.ownerName}<br>
+            人數：${room.players}/${room.playerLimit}<br>
+            地圖：${room.mapSize}x${room.mapSize}<br>
+            題庫：${room.modeText}
+          </div>
+        `;
+        item.onclick = () => quickJoinRoom(room);
+        publicRoomsList.appendChild(item);
+      });
+    }
+
+    function quickJoinRoom(room) {
+      const nickname = nicknameInput.value.trim();
+      if (!nickname) {
+        alert("請先輸入暱稱");
+        return;
+      }
+
+      socket.emit("join_room", {
+        roomNo: room.roomNo,
+        nickname,
+        roleId: state.selectedRoleId,
+        mapSize: room.mapSize,
+        playerLimit: room.playerLimit,
+        mode: room.mode
       });
     }
 
@@ -1116,12 +1203,12 @@
 
     document.getElementById("joinBtn").addEventListener("click", () => {
       socket.emit("join_room", {
-        roomNo: document.getElementById("roomInput").value.trim() || "123",
-        nickname: document.getElementById("nicknameInput").value.trim() || "玩家",
+        roomNo: roomInput.value.trim(),
+        nickname: nicknameInput.value.trim() || "玩家",
         roleId: state.selectedRoleId,
-        mapSize: Number(document.getElementById("mapSizeSelect").value),
-        playerLimit: Number(document.getElementById("playerCountSelect").value),
-        mode: document.getElementById("modeSelect").value
+        mapSize: Number(mapSizeSelect.value),
+        playerLimit: Number(playerCountSelect.value),
+        mode: modeSelect.value
       });
     });
 
@@ -1151,6 +1238,11 @@
 
     socket.on("join_error", (msg) => alert(msg));
     socket.on("action_error", (msg) => alert(msg));
+
+    socket.on("public_rooms", (rooms) => {
+      state.publicRooms = rooms || [];
+      renderPublicRooms();
+    });
 
     socket.on("room_state", (room) => {
       state.room = room;
@@ -1236,6 +1328,7 @@
     });
 
     renderRoles();
+    renderPublicRooms();
   </script>
 </body>
 </html>
