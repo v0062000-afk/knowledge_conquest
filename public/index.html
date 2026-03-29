@@ -50,6 +50,18 @@
       border: 1px solid rgba(130,141,255,.35);
     }
 
+    .btn-confirm {
+      background: #4e84f3;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn-cancel {
+      background: #8a8db0;
+      color: #fff;
+      cursor: pointer;
+    }
+
     .label {
       font-size: 15px;
       font-weight: 800;
@@ -592,6 +604,7 @@
       <div class="mobile-sheet-title">題目挑戰</div>
       <div class="question-type-tag">⏳ 剩餘時間：<span id="modalTimerText">15 秒</span></div>
       <div id="modalQuestionText" class="mobile-sheet-content" style="font-size:20px;font-weight:900;margin-bottom:14px;"></div>
+      <div id="questionSkillBar" style="margin-bottom:12px;"></div>
       <div id="modalOptionsWrap" class="options"></div>
       <div id="modalResultBox" class="result-box"></div>
       <div class="mobile-sheet-actions">
@@ -607,6 +620,13 @@
       <div id="winnerText" class="winner-text"></div>
       <div id="winnerStat" class="winner-stat"></div>
       <button id="closeWinnerBtn" class="btn btn-confirm">關閉</button>
+    </div>
+  </div>
+
+  <div id="freezeModal" class="winner-modal">
+    <div class="winner-card" style="max-width:420px;">
+      <div class="winner-big">❄️ 你目前被凍結中</div>
+      <div id="freezeCountdownText" class="winner-text">5 秒</div>
     </div>
   </div>
 
@@ -634,7 +654,9 @@
       selectedTileIndex: null,
       timerInterval: null,
       countdownInterval: null,
-      expireAt: 0
+      freezeInterval: null,
+      expireAt: 0,
+      activeSkillMode: null
     };
 
     const roleGrid = document.getElementById("roleGrid");
@@ -660,6 +682,9 @@
     const readyBtn = document.getElementById("readyBtn");
     const lobbyInfo = document.getElementById("lobbyInfo");
     const countdownBox = document.getElementById("countdownBox");
+    const questionSkillBar = document.getElementById("questionSkillBar");
+    const freezeModal = document.getElementById("freezeModal");
+    const freezeCountdownText = document.getElementById("freezeCountdownText");
 
     function getRoleImage(role) {
       return role.imageCandidates[0];
@@ -683,6 +708,13 @@
       }
     }
     window.handleImgFallback = handleImgFallback;
+
+    function getSimpleHint(type) {
+      if (["國文", "歷史", "地理"].includes(type)) return "📘 人文類";
+      if (["數學", "科學"].includes(type)) return "🔬 理科類";
+      if (["邏輯"].includes(type)) return "🧠 推理類";
+      return "❓";
+    }
 
     function myPlayer() {
       return state.room?.players?.find((p) => p.isSelf) || null;
@@ -819,7 +851,7 @@
         div.className = cls;
         div.innerHTML = `
           <div class="tile-header">#${tile.index + 1}</div>
-          <div class="tile-type">${tile.visibleType}</div>
+          <div class="tile-type">${tile.visibleType === "?" ? "?" : tile.visibleType}</div>
         `;
 
         playersAtTile(tile.index).forEach((player, idx) => {
@@ -849,6 +881,46 @@
       });
     }
 
+    function renderFreezeModal() {
+      const me = myPlayer();
+      clearInterval(state.freezeInterval);
+
+      if (!me || me.status !== "凍結中" || !me.frozenUntil || Date.now() >= me.frozenUntil) {
+        freezeModal.classList.remove("show");
+        return;
+      }
+
+      const tick = () => {
+        const left = Math.max(0, Math.ceil((me.frozenUntil - Date.now()) / 1000));
+        freezeCountdownText.textContent = `${left} 秒`;
+
+        if (left <= 0) {
+          clearInterval(state.freezeInterval);
+          freezeModal.classList.remove("show");
+        }
+      };
+
+      freezeModal.classList.add("show");
+      tick();
+      state.freezeInterval = setInterval(tick, 250);
+    }
+
+    function renderQuestionSkillBar() {
+      questionSkillBar.innerHTML = "";
+      const me = myPlayer();
+      if (!me) return;
+
+      if (me.roleId === "scholar" && me.counts?.delete2 > 0) {
+        const btn = document.createElement("button");
+        btn.className = "btn skill-btn skill-green";
+        btn.textContent = `✂️ 刪2選項 (${me.counts.delete2})`;
+        btn.onclick = () => {
+          socket.emit("use_skill", { skill: "delete2" });
+        };
+        questionSkillBar.appendChild(btn);
+      }
+    }
+
     function renderSkillArea() {
       skillButtonsWrap.innerHTML = "";
       const me = myPlayer();
@@ -867,6 +939,10 @@
         previewContent.textContent = "你已結束，等待其他玩家結算。";
       } else if (me.status === "凍結中") {
         previewContent.textContent = "你目前被凍結中，暫時不能行動。";
+      } else if (state.activeSkillMode === "bomb") {
+        previewContent.textContent = "請點選任意地圖格子，將它炸成灰色格。";
+      } else if (state.activeSkillMode === "reset") {
+        previewContent.textContent = "請點選鄰近的灰色格子進行重置。";
       } else {
         previewContent.textContent = "請點選你目前可走的鄰近格。";
       }
@@ -913,8 +989,8 @@
         btn.className = "btn skill-btn skill-red";
         btn.textContent = `💣 炸彈 (${me.counts.bomb})`;
         btn.onclick = () => {
-          if (state.selectedTileIndex == null) return alert("請先選格子");
-          socket.emit("use_skill", { skill: "bomb", targetTileIndex: state.selectedTileIndex });
+          state.activeSkillMode = "bomb";
+          previewContent.textContent = "請點選任意地圖格子，將它炸成灰色格。";
         };
         skillButtonsWrap.appendChild(btn);
       }
@@ -924,8 +1000,8 @@
         btn.className = "btn skill-btn skill-red";
         btn.textContent = `🔄 重置灰格 (${me.counts.reset})`;
         btn.onclick = () => {
-          if (state.selectedTileIndex == null) return alert("請先選灰格");
-          socket.emit("use_skill", { skill: "reset", targetTileIndex: state.selectedTileIndex });
+          state.activeSkillMode = "reset";
+          previewContent.textContent = "請點選鄰近的灰色格子進行重置。";
         };
         skillButtonsWrap.appendChild(btn);
       }
@@ -965,23 +1041,42 @@
       if (!me || me.ended) return alert("你已經結束");
       if (me.status === "凍結中") return alert("你目前被凍結中");
 
-      const movable = movableIndexesForSelf();
       const tile = state.room.board[index];
+      const movable = movableIndexesForSelf();
+      const neighborIndexes = getNeighbors(me.position, state.room.mapSize);
 
-      const canSelect =
-        movable.includes(index) ||
-        tile.status === "blocked";
+      if (state.activeSkillMode === "bomb") {
+        socket.emit("use_skill", { skill: "bomb", targetTileIndex: index });
+        state.activeSkillMode = null;
+        previewContent.textContent = "請點選你目前可走的鄰近格。";
+        return;
+      }
 
+      if (state.activeSkillMode === "reset") {
+        if (!neighborIndexes.includes(index) || tile.status !== "blocked") {
+          return alert("只能點選鄰近的灰色格子");
+        }
+        socket.emit("use_skill", { skill: "reset", targetTileIndex: index });
+        state.activeSkillMode = null;
+        previewContent.textContent = "請點選你目前可走的鄰近格。";
+        return;
+      }
+
+      const canSelect = movable.includes(index);
       if (!canSelect) {
-        alert("只能選鄰近可走格，或選灰格來重置");
+        alert("只能選鄰近可走格");
         return;
       }
 
       state.selectedTileIndex = index;
 
+      const hintText = me.roleId === "prophet"
+        ? tile.type
+        : getSimpleHint(tile.type);
+
       tileModalContent.innerHTML = `
         格子編號：#${tile.index + 1}<br>
-        題型提示：${tile.visibleType}<br>
+        題型提示：${hintText}<br>
         目前占領：${tile.owner || "無"}<br>
         狀態：${tile.status === "blocked" ? "灰色封鎖" : "可挑戰"}
       `;
@@ -1049,6 +1144,7 @@
       gameScreen.classList.toggle("show", !!room && room.started);
 
       renderRoom();
+      renderFreezeModal();
 
       if (room.finished) {
         const sorted = [...room.players].sort((a, b) => b.score - a.score);
@@ -1076,6 +1172,7 @@
       modalResultBox.className = "result-box";
       modalResultBox.textContent = "";
       startTimer(expireAt);
+      renderQuestionSkillBar();
 
       question.options.forEach((opt, idx) => {
         const option = document.createElement("div");
@@ -1117,6 +1214,7 @@
         questionModal.classList.remove("show");
         modalResultBox.className = "result-box";
         modalResultBox.textContent = "";
+        questionSkillBar.innerHTML = "";
         state.selectedTileIndex = null;
       }, 900);
     });
